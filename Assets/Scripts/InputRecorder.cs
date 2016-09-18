@@ -4,7 +4,7 @@ using UnityStandardAssets.Characters.FirstPerson;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
-public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler 
+public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
 	private struct RecordedEvent
 	{
@@ -24,8 +24,9 @@ public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler
 		OnPointerExit = 1,
 		OnPointerDown = 2,
 		OnPointerUp = 3,
-		OnPointerClick = 4
-	};
+		OnPointerClick = 4}
+
+	;
 
 	Queue<RecordedEvent> events = new Queue<RecordedEvent>();
 
@@ -37,7 +38,7 @@ public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler
 	// Update is called once per frame
 	void Update()
 	{
-		if (State ==  RecordingState.Playing) {
+		if (State == RecordingState.Playing) {
 			// Check if the time for any events on the queue has come yet
 			float playbackTime = GetRelativeTime();
 
@@ -55,22 +56,23 @@ public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler
 		}
 	}
 
-	private void DispatchEvent(RecordedEvent evt) {
+	private void DispatchEvent(RecordedEvent evt)
+	{
 		switch (evt.Type) {
 		case EventType.OnPointerEnter:
 			ExecuteEvents.Execute(this.gameObject, evt.Data, ExecuteEvents.pointerEnterHandler);
 			break;
 		case EventType.OnPointerExit:
-			ExecuteEvents.Execute(this.gameObject, evt.Data,ExecuteEvents.pointerExitHandler);
+			ExecuteEvents.Execute(this.gameObject, evt.Data, ExecuteEvents.pointerExitHandler);
 			break;
 		case EventType.OnPointerDown:
-			ExecuteEvents.Execute(this.gameObject, evt.Data,ExecuteEvents.pointerDownHandler);
+			ExecuteEvents.Execute(this.gameObject, evt.Data, ExecuteEvents.pointerDownHandler);
 			break;
 		case EventType.OnPointerUp:
-			ExecuteEvents.Execute(this.gameObject, evt.Data,ExecuteEvents.pointerUpHandler);
+			ExecuteEvents.Execute(this.gameObject, evt.Data, ExecuteEvents.pointerUpHandler);
 			break;
 		case EventType.OnPointerClick:
-			ExecuteEvents.Execute(this.gameObject, evt.Data,ExecuteEvents.pointerClickHandler);
+			ExecuteEvents.Execute(this.gameObject, evt.Data, ExecuteEvents.pointerClickHandler);
 			break;
 		}
 	}
@@ -126,7 +128,7 @@ public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler
 			});
 		}
 	}
-		
+
 	public void OnPointerClick(PointerEventData eventData)
 	{
 		if (State == RecordingState.Recording) {

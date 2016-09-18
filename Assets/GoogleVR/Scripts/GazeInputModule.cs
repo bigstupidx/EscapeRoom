@@ -98,10 +98,6 @@ public class GazeInputModule : BaseInputModule {
   }
 
   public override void Process() {
-	if (!this.enabled) {
-		return;
-	}
-
     // Save the previous Game Object
     GameObject gazeObjectPrevious = GetCurrentGameObject();
 

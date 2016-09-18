@@ -141,7 +141,8 @@ public class RecordingManager : MonoBehaviour
 		State = RecordingState.Inactive;
 	}
 
-	public void StartPlaybackButtonPressed() {
+	public void StartPlaybackButtonPressed()
+	{
 		if (State == RecordingState.Recording) {
 			RecordingManager.StopRecording();
 		} else if (State == RecordingState.Playing) {

@@ -66,7 +66,7 @@ public class MotionRecorder : Recorder
 			break;
 		}
 	}
-		
+
 	public override void StartRecording()
 	{
 		// Clear any previous recordings
