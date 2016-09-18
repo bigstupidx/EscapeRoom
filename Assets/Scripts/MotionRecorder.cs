@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityStandardAssets.Characters.FirstPerson;
 
-public class MotionRecorder : MonoBehaviour
+public class MotionRecorder : Recorder
 {
 	// Structure to make it easier to refer to the 3 components of an animation curve
 	private class Vector3Curve
@@ -66,57 +66,41 @@ public class MotionRecorder : MonoBehaviour
 			break;
 		}
 	}
-
-	private RecordingState _state = RecordingState.Inactive;
-
-	public RecordingState State {
-		get { return _state; }
-		private set { _state = value; }
-	}
-
-	//Recording
-	private float recordingStartTime = 0;
-	private float lastKeyTime = 0;
-
-	public void StartRecording()
+		
+	public override void StartRecording()
 	{
-		// Can only start recording from Inactive state
-		if (State != RecordingState.Inactive) {
-			throw new UnityException("State must be 'Inactive' to start a new recording.");
-		}
-
-		// Get current time
-		float now = Time.realtimeSinceStartup;
-
-		// Record start time of recording so that other times can be recorded relative to that
-		recordingStartTime = now;
-
 		// Clear any previous recordings
 		rotations.Clear();
 		translations.Clear();
 
-		// Record a key frame at the start of recording to ensure that original position is saved
-		RecordKeyFrame(now);
+		base.StartRecording();
 
-		// Set new state value
-		State = RecordingState.Recording;
+		// Record a key frame at the start of recording to ensure that original position is saved
+		RecordKeyFrame(recordingStartTime);
 	}
 
-	public void StopRecording()
+	public override void StopRecording()
 	{
-		// Can only stop recording from Recording state
-		if (State != RecordingState.Recording) {
-			throw new UnityException("State must be 'Recording' to end a recording.");
-		}
+		base.StopRecording();
 
 		// Get current time
 		float now = Time.realtimeSinceStartup;
+	}
 
-		// Record a key frame at the end of the recording to ensure that final position is saved, regardless of sample rate.
-		RecordKeyFrame(now);
+	public override void StartPlayback()
+	{
+		base.StartPlayback();
 
-		// Set new state value
-		State = RecordingState.Inactive;
+		// Sample initial position
+		SampleCurves(Time.realtimeSinceStartup);
+	}
+
+	public override void StopPlayback()
+	{
+		base.StopPlayback();
+
+		// Sample final position
+		SampleCurves(Time.realtimeSinceStartup);
 	}
 
 	private void RecordKeyFrame(float realTime)
@@ -140,40 +124,6 @@ public class MotionRecorder : MonoBehaviour
 		rotations.W.AddKey(time, localRotation.w);
 
 		lastKeyTime = time;
-	}
-
-	// Playback
-	private float playbackStartTime = 0;
-
-	public void StartPlayback()
-	{
-		// Can only start recording from Inactive state
-		if (State != RecordingState.Inactive) {
-			throw new UnityException("State must be 'Inactive' to start playback.");
-		}
-
-		// Record time playback starts so that we can calculate a relative time to the animation curves
-		playbackStartTime = Time.realtimeSinceStartup;
-
-		// Sample initial position
-		SampleCurves(Time.realtimeSinceStartup);
-
-		// Set new state value
-		State = RecordingState.Playing;
-	}
-
-	public void StopPlayback()
-	{
-		// Can only start recording from Inactive state
-		if (State != RecordingState.Playing) {
-			throw new UnityException("State must be 'Playing' to stop playback.");
-		}
-
-		// Sample final position
-		SampleCurves(Time.realtimeSinceStartup);
-
-		// Set new state value
-		State = RecordingState.Inactive;
 	}
 
 	private void SampleCurves(float realTime)

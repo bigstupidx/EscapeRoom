@@ -2,13 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum RecordingState
-{
-	Inactive,
-	Recording,
-	Playing}
-;
-
 public class RecordingManager : MonoBehaviour
 {
 	// Use this for initialization
@@ -42,11 +35,11 @@ public class RecordingManager : MonoBehaviour
 			throw new UnityException("State must be 'Inactive' to start a new recording.");
 		}
 
-		// Find all MotionRecorder objects in the scene and tell them to start recording
-		foreach (object obj in Object.FindObjectsOfType(typeof(MotionRecorder))) {
-			MotionRecorder mr = obj as MotionRecorder;
-			if (mr != null) {
-				mr.StartRecording();
+		// Find all Recorder objects in the scene and tell them to start recording
+		foreach (object obj in Object.FindObjectsOfType(typeof(Recorder))) {
+			Recorder r = obj as Recorder;
+			if (r != null) {
+				r.StartRecording();
 			}
 		}
 
@@ -61,11 +54,11 @@ public class RecordingManager : MonoBehaviour
 			throw new UnityException("State must be 'Recording' to end a recording.");
 		}
 
-		// Find all MotionRecorder objects in the scene and tell them to stop recording
-		foreach (object obj in Object.FindObjectsOfType(typeof(MotionRecorder))) {
-			MotionRecorder mr = obj as MotionRecorder;
-			if (mr != null) {
-				mr.StopRecording();
+		// Find all Recorder objects in the scene and tell them to stop recording
+		foreach (object obj in Object.FindObjectsOfType(typeof(Recorder))) {
+			Recorder r = obj as Recorder;
+			if (r != null) {
+				r.StopRecording();
 			}
 		}
 
@@ -100,11 +93,11 @@ public class RecordingManager : MonoBehaviour
 			}
 		}
 
-		// Find all MotionRecorder objects in the scene and tell them to start playing
-		foreach (object obj in Object.FindObjectsOfType(typeof(MotionRecorder))) {
-			MotionRecorder mr = obj as MotionRecorder;
-			if (mr != null) {
-				mr.StartPlayback();
+		// Find all Recorder objects in the scene and tell them to start playing
+		foreach (object obj in Object.FindObjectsOfType(typeof(Recorder))) {
+			Recorder r = obj as Recorder;
+			if (r != null) {
+				r.StartPlayback();
 			}
 		}
 
@@ -119,11 +112,11 @@ public class RecordingManager : MonoBehaviour
 			throw new UnityException("State must be 'Playing' to stop playback.");
 		}
 
-		// Find all MotionRecorder objects in the scene and tell them to stop playing
-		foreach (object obj in Object.FindObjectsOfType(typeof(MotionRecorder))) {
-			MotionRecorder mr = obj as MotionRecorder;
-			if (mr != null) {
-				mr.StopPlayback();
+		// Find all Recorder objects in the scene and tell them to stop playing
+		foreach (object obj in Object.FindObjectsOfType(typeof(Recorder))) {
+			Recorder r = obj as Recorder;
+			if (r != null) {
+				r.StopPlayback();
 			}
 		}
 
