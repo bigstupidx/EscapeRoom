@@ -20,13 +20,12 @@ public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler
 
 	private enum EventType
 	{
-		OnPointerEnter = 0,
-		OnPointerExit = 1,
-		OnPointerDown = 2,
-		OnPointerUp = 3,
-		OnPointerClick = 4}
-
-	;
+		OnPointerEnter,
+		OnPointerExit,
+		OnPointerDown,
+		OnPointerUp,
+		OnPointerClick
+	};
 
 	Queue<RecordedEvent> events = new Queue<RecordedEvent>();
 
@@ -58,21 +57,23 @@ public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler
 
 	private void DispatchEvent(RecordedEvent evt)
 	{
+		EventSystem eventSystem = Object.FindObjectOfType(typeof(EventSystem)) as EventSystem;
+
 		switch (evt.Type) {
 		case EventType.OnPointerEnter:
-			ExecuteEvents.Execute(this.gameObject, evt.Data, ExecuteEvents.pointerEnterHandler);
+			ExecuteEvents.Execute(this.gameObject, new PointerEventData(eventSystem), ExecuteEvents.pointerEnterHandler);
 			break;
 		case EventType.OnPointerExit:
-			ExecuteEvents.Execute(this.gameObject, evt.Data, ExecuteEvents.pointerExitHandler);
+			ExecuteEvents.Execute(this.gameObject, new PointerEventData(eventSystem), ExecuteEvents.pointerExitHandler);
 			break;
 		case EventType.OnPointerDown:
-			ExecuteEvents.Execute(this.gameObject, evt.Data, ExecuteEvents.pointerDownHandler);
+			ExecuteEvents.Execute(this.gameObject, new PointerEventData(eventSystem), ExecuteEvents.pointerDownHandler);
 			break;
 		case EventType.OnPointerUp:
-			ExecuteEvents.Execute(this.gameObject, evt.Data, ExecuteEvents.pointerUpHandler);
+			ExecuteEvents.Execute(this.gameObject, new PointerEventData(eventSystem), ExecuteEvents.pointerUpHandler);
 			break;
 		case EventType.OnPointerClick:
-			ExecuteEvents.Execute(this.gameObject, evt.Data, ExecuteEvents.pointerClickHandler);
+			ExecuteEvents.Execute(this.gameObject, new PointerEventData(eventSystem), ExecuteEvents.pointerClickHandler);
 			break;
 		}
 	}
