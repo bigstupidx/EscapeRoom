@@ -32,7 +32,15 @@ public class Teleport : MonoBehaviour, IGvrGazeResponder {
   }
 
   public void SetGazedAt(bool gazedAt) {
-    GetComponent<Renderer>().material.color = gazedAt ? Color.green : Color.red;
+    if (gazedAt == true)
+        {
+            GetComponent<Renderer>().material.color = Color.green;
+        }
+    else
+        {
+            GetComponent<Renderer>().material.color = Color.yellow;
+        }
+    //GetComponent<Renderer>().material.color = gazedAt ? Color.green : Color.;
   }
 
   public void Reset() {
@@ -67,6 +75,20 @@ public class Teleport : MonoBehaviour, IGvrGazeResponder {
     direction.y = Mathf.Clamp(direction.y, 0.5f, 1f);
     float distance = 2 * Random.value + 1.5f;
     transform.localPosition = direction * distance;
+  }
+
+  public void pickUp() {
+    GameVariables.keyCount += 1;
+    Destroy(gameObject);
+  }
+
+  public void openDrawer() {
+    if (GameVariables.keyCount >= 1)
+        {
+            GetComponent<Renderer>().material.color = Color.blue;
+        }
+        
+
   }
 
   #region IGvrGazeResponder implementation
