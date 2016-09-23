@@ -27,6 +27,6 @@ public class MenuManager : MonoBehaviour {
 
     public void MainMenuButtonPressed()
     {
-        Application.LoadLevel("MainMenuScene");
+        Application.LoadLevel("MenuScene");
     }
 }
