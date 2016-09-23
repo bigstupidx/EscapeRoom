@@ -1,23 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour {
 
     public RecordingManager recordingManager;
 
+
 	public void PlayButtonPressed()
     {
-		Application.LoadLevel ("GameScene");
+		SceneManager.LoadScene("GameScene");
+		RecordingManager.StartRecording ();
 	}
 
 	public void RecordingsButtonPressed()
     {
-        Application.LoadLevel("RecordingsMenuScene");
+        SceneManager.LoadScene("RecordingsMenuScene");
     }
 
 	public void SettingsButtonPressed()
     {
-		Application.LoadLevel ("SettingsMenuScene");
+		SceneManager.LoadScene("SettingsMenuScene");
 	}
 
 	public void QuitButtonPressed()
@@ -27,12 +30,33 @@ public class MenuManager : MonoBehaviour {
 
     public void MainMenuButtonPressed()
     {
-        Application.LoadLevel("MenuScene");
+		SceneManager.LoadScene("MenuScene");
     }
 
-    public void ReplayRecordingButtonPressed()
+    public  void ReplayRecordingButtonPressed()
     {
-        Application.LoadLevel("GameScene");
-        recordingManager.LoadRecordingButtonPressed();
+		RecordingManager.StartupState = RecordingState.Playing;
+		RecordingManager.StartupPlaybackFileName = "testRecording.xml";
+
+		SceneManager.LoadScene("GameScene");
+
+		//recordingManager.LoadRecordingButtonPressed();
+		// Subscribe to iteration complete event with code that resets the scene
+		RecordingManager.IterationComplete +=  RecordingManager_IterationComplete;
+		RecordingManager.PlaybackComplete +=  RecordingManager_PlaybackComplete;
     }
+		
+	void RecordingManager_IterationComplete ()
+	{
+		SceneManager.LoadScene("GameScene");
+	}
+
+	void RecordingManager_PlaybackComplete ()
+	{
+		
+		// Unsubscribe
+		RecordingManager.IterationComplete -= RecordingManager_IterationComplete;
+		// Unsubscribe
+		RecordingManager.PlaybackComplete -= RecordingManager_PlaybackComplete;
+	}
 }
