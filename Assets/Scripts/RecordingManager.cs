@@ -7,14 +7,24 @@ public delegate void PlaybackCompleteHandler();
 
 public class RecordingManager : MonoBehaviour
 {
-	public event PlaybackCompleteHandler IterationComplete;
+	public static event PlaybackCompleteHandler IterationComplete;
 
-	public event PlaybackCompleteHandler PlaybackComplete;
+	public static event PlaybackCompleteHandler PlaybackComplete;
+
+	public static RecordingState StartupState { get; set; }
+
+	public static string StartupPlaybackFileName { get; set; }
 
 	// Use this for initialization
 	void Start()
 	{
-		StartRecording();
+		if (StartupState == RecordingState.Playing) {
+			Recording recording = Recording.Load(StartupPlaybackFileName);
+			RecordingManager.SetRecording(recording);
+			StartPlayback();
+		} else if (StartupState == RecordingState.Recording) {
+			StartRecording();
+		}
 	}
 	
 	// Update is called once per frame
@@ -228,7 +238,7 @@ public class RecordingManager : MonoBehaviour
 		IterationComplete -= RecordingManager_IterationComplete;
 	}
 
-	public Recording GetRecording()
+	public static Recording GetRecording()
 	{
 		Recording recording = new Recording();
 
@@ -246,7 +256,7 @@ public class RecordingManager : MonoBehaviour
 		return recording;
 	}
 
-	public void SetRecording(Recording recording)
+	public static void SetRecording(Recording recording)
 	{
 		// Build dictionary of names from the recordings by type
 		Dictionary<string, List<Recording.Timeline>> timelines = new Dictionary<string, List<Recording.Timeline>>();
