@@ -77,19 +77,9 @@ public class Teleport : MonoBehaviour, IGvrGazeResponder {
     transform.localPosition = direction * distance;
   }
 
-  public void pickUp() {
-    GameVariables.keyCount += 1;
-    Destroy(gameObject);
-  }
+  
 
-  public void openDrawer() {
-    if (GameVariables.keyCount >= 1)
-        {
-            GetComponent<Renderer>().material.color = Color.blue;
-        }
-        
-
-  }
+  
 
   #region IGvrGazeResponder implementation
 
