@@ -154,6 +154,7 @@ public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler
 	public override void Clear()
 	{
 		events.Clear();
+		finishedEvents.Clear();
 	}
 
 	public override float Length {
