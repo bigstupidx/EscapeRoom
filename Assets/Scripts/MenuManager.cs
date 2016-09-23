@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MenuManager : MonoBehaviour {
 
-
+    public RecordingManager recordingManager;
 
 	public void PlayButtonPressed()
     {
@@ -28,5 +28,11 @@ public class MenuManager : MonoBehaviour {
     public void MainMenuButtonPressed()
     {
         Application.LoadLevel("MenuScene");
+    }
+
+    public void ReplayRecordingButtonPressed()
+    {
+        Application.LoadLevel("GameScene");
+        recordingManager.LoadRecordingButtonPressed();
     }
 }
