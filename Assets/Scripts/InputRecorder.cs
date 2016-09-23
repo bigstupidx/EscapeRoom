@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
 	Queue<Recording.RecordedEvent> events = new Queue<Recording.RecordedEvent>();
+	Queue<Recording.RecordedEvent> finishedEvents = new Queue<Recording.RecordedEvent>();
 
 	// Use this for initialization
 	void Start()
@@ -25,12 +26,26 @@ public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler
 
 				if (evt.Time <= playbackTime) {
 					// Dequeue and dispatch the event since its time has come
-					DispatchEvent(events.Dequeue());
+					evt = events.Dequeue();
+
+					DispatchEvent(evt);
+
+					finishedEvents.Enqueue(evt);
 				} else {
 					// Stop looping after we hit the first one that is in the future, since they are in time order
 					break;
 				}
 			}
+		}
+	}
+
+	public override void StopPlayback()
+	{
+		base.StopPlayback();
+
+		// Re-enqueue all played events
+		while (finishedEvents.Count > 0) {
+			events.Enqueue(finishedEvents.Dequeue());
 		}
 	}
 
@@ -139,6 +154,17 @@ public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler
 	public override void Clear()
 	{
 		events.Clear();
+	}
+
+	public override float Length {
+		get {
+			if (events.Count == 0) {
+				return 0;
+			}
+
+			var array = this.events.ToArray();
+			return array[array.Length - 1].Time;
+		}
 	}
 }
 

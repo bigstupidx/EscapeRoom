@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityStandardAssets.Characters.FirstPerson;
 using System.Collections.Generic;
+using System;
 
 public class MotionRecorder : Recorder
 {
@@ -227,6 +228,23 @@ public class MotionRecorder : Recorder
 	{
 		rotations.Clear();
 		translations.Clear();
+	}
+
+	public override float Length {
+		get {
+			float translationLength = 0;
+			float rotationLength = 0;
+
+			if (translations.X.length > 0) {
+				translationLength = translations.X.keys[translations.X.length - 1].time;
+			}
+
+			if (rotations.X.length > 0) {
+				rotationLength = rotations.X.keys[rotations.X.length - 1].time;
+			}
+
+			return Math.Max(rotationLength, translationLength);
+		}
 	}
 }
 

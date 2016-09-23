@@ -7,8 +7,9 @@ public enum RecordingState
 {
 	Inactive,
 	Recording,
-	Playing}
-;
+	Playing,
+	DonePlaying
+};
 
 public abstract class Recorder : MonoBehaviour
 {
@@ -104,6 +105,9 @@ public abstract class Recorder : MonoBehaviour
 
 	// This must be implemented by derived classes to clear any stored recordings
 	public abstract void Clear();
+
+	// This must be implemented by derived classes to return the length of the recording
+	public abstract float Length { get; }
 }
 
 

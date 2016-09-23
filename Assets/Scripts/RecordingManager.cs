@@ -3,8 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
+public delegate void PlaybackCompleteHandler();
+
 public class RecordingManager : MonoBehaviour
 {
+	public event PlaybackCompleteHandler IterationComplete;
+
+	public event PlaybackCompleteHandler PlaybackComplete;
+
 	// Use this for initialization
 	void Start()
 	{
@@ -20,6 +26,28 @@ public class RecordingManager : MonoBehaviour
 		}
 
 		modulesToDeactivate.Clear();
+
+		// Check if recording is done
+		if (State == RecordingState.Playing) {
+			if (Time.realtimeSinceStartup - playbackStartTime > playbackLength) {
+				StopPlayback();
+				if (remainingIterations > 0) {
+					StartPlayback();
+					remainingIterations--;
+
+					// Fire an iteration complete event so that subscribed classes can react (for example, to reset the world)
+					if (IterationComplete != null) {
+						IterationComplete();
+					}
+				} else {
+
+					// Fire a playback complete event so that subscribed classes can react (for example, to show a screen with recorded stats)
+					if (PlaybackComplete != null) {
+						PlaybackComplete();
+					}
+				}
+			}
+		}
 	}
 
 	private static RecordingState _state = RecordingState.Inactive;
@@ -71,12 +99,24 @@ public class RecordingManager : MonoBehaviour
 	// Track it here and deactivate during next update.
 	private static List<GazeInputModule> modulesToDeactivate = new List<GazeInputModule>();
 
-	public static void StartPlayback()
+	private static float playbackStartTime = 0.0f;
+	private static float playbackLength = 0.0f;
+	private static int remainingIterations = 0;
+
+	public static void StartPlayback(int iterations = 1)
 	{
 		// Can only start recording from Inactive state
 		if (State != RecordingState.Inactive) {
 			throw new UnityException("State must be 'Inactive' to start playback.");
 		}
+
+		if (iterations < 1) {
+			throw new UnityException("Iteration count must be one or more");
+		}
+
+		remainingIterations = iterations - 1;
+
+		playbackStartTime = Time.realtimeSinceStartup;
 
 		// Find GazeInputModule objects and deactivate them
 		foreach (object obj in Object.FindObjectsOfType(typeof(GazeInputModule))) {
@@ -95,10 +135,16 @@ public class RecordingManager : MonoBehaviour
 		}
 
 		// Find all Recorder objects in the scene and tell them to start playing
+		playbackLength = 0.0f;
 		foreach (object obj in Object.FindObjectsOfType(typeof(Recorder))) {
 			Recorder r = obj as Recorder;
 			if (r != null) {
 				r.StartPlayback();
+
+				// Record the longest length value
+				if (r.Length > playbackLength) {
+					playbackLength = r.Length;
+				}
 			}
 		}
 
@@ -162,10 +208,24 @@ public class RecordingManager : MonoBehaviour
 			RecordingManager.StopPlayback();
 		}
 
+		// Subscribe to iteration complete event with code that resets the scene
+		IterationComplete += RecordingManager_IterationComplete;
+
 		Recording recording = Recording.Load("testRecording.xml");
 		SetRecording(recording);
 
-		RecordingManager.StartPlayback();
+		RecordingManager.StartPlayback(2);
+	}
+
+
+	void RecordingManager_IterationComplete ()
+	{
+		GameObject cube = GameObject.Find("Cube");
+		Teleport teleport = cube.GetComponent(typeof(Teleport)) as Teleport;
+		teleport.Reset();
+
+		// Unsubscribe
+		IterationComplete -= RecordingManager_IterationComplete;
 	}
 
 	public Recording GetRecording()
