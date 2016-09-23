@@ -6,12 +6,12 @@ public class MenuManager : MonoBehaviour {
 
 
 	public void PlayButtonPressed() {
-		Application.LoadLevel ("TestScene");
+		Application.LoadLevel ("GameScene");
 	}
 
-	void RecordingsButtonPressed() {
-
-	}
+	public void RecordingsButtonPressed() {
+        Application.LoadLevel("RecordingsMenuScene");
+    }
 
 	public void SettingsButtonPressed() {
 		Application.LoadLevel ("SettingsMenuScene");
