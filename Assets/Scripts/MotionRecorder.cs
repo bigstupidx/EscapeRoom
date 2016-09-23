@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityStandardAssets.Characters.FirstPerson;
+using System.Collections.Generic;
 
 public class MotionRecorder : Recorder
 {
@@ -69,10 +70,6 @@ public class MotionRecorder : Recorder
 
 	public override void StartRecording()
 	{
-		// Clear any previous recordings
-		rotations.Clear();
-		translations.Clear();
-
 		base.StartRecording();
 
 		// Record a key frame at the start of recording to ensure that original position is saved
@@ -149,6 +146,87 @@ public class MotionRecorder : Recorder
 		newLocalRotation.w = rotations.W.Evaluate(time);
 
 		this.transform.localRotation = newLocalRotation;
+	}
+
+	public override List<Recording.Timeline> GetTimelines()
+	{
+		List<Recording.Timeline> result = new List<Recording.Timeline>();
+		Recording.PositionTimeline posTimeline = new Recording.PositionTimeline();
+		Recording.RotationTimeline rotTimeline = new Recording.RotationTimeline();
+
+		posTimeline.ObjectName = this.name;
+		rotTimeline.ObjectName = this.name;
+
+		int count = translations.X.keys.Length;
+
+		if (translations.Y.keys.Length != count || translations.Z.keys.Length != count) {
+			throw new UnityException("Unexpected mismatch in X, Y, and Z position key frames");
+		}
+
+		for (int i = 0; i < count; ++i) {
+			Recording.PositionKey key = new Recording.PositionKey();
+			key.Time = translations.X.keys[i].time;
+			key.X = translations.X.keys[i].value;
+			key.Y = translations.Y.keys[i].value;
+			key.Z = translations.Z.keys[i].value;
+			posTimeline.Positions.Add(key);
+		}
+			
+		result.Add(posTimeline);
+
+		count = rotations.X.keys.Length;
+
+		if (rotations.Y.keys.Length != count || rotations.Z.keys.Length != count || rotations.W.keys.Length != count) {
+			throw new UnityException("Unexpected mismatch in X, Y, Z, and W rotation key frames");
+		}
+
+		for (int i = 0; i < count; ++i) {
+			Recording.RotationKey key = new Recording.RotationKey();
+			key.Time = rotations.X.keys[i].time;
+			key.X = rotations.X.keys[i].value;
+			key.Y = rotations.Y.keys[i].value;
+			key.Z = rotations.Z.keys[i].value;
+			key.W = rotations.W.keys[i].value;
+			rotTimeline.Rotations.Add(key);
+		}
+
+		result.Add(rotTimeline);
+
+		return result;
+	}
+
+	public override void SetTimelines(List<Recording.Timeline> timelines)
+	{
+		Clear();
+
+		foreach (Recording.Timeline t in timelines) {
+			Recording.PositionTimeline posTimeline = t as Recording.PositionTimeline;
+
+			if (posTimeline != null) {
+				foreach (Recording.PositionKey key in posTimeline.Positions) {
+					translations.X.AddKey(key.Time, key.X);
+					translations.Y.AddKey(key.Time, key.Y);
+					translations.Z.AddKey(key.Time, key.Z);
+				}
+			}
+
+			Recording.RotationTimeline rotTimeline = t as Recording.RotationTimeline;
+
+			if (rotTimeline != null) {
+				foreach (Recording.RotationKey key in rotTimeline.Rotations) {
+					rotations.X.AddKey(key.Time, key.X);
+					rotations.Y.AddKey(key.Time, key.Y);
+					rotations.Z.AddKey(key.Time, key.Z);
+					rotations.W.AddKey(key.Time, key.W);
+				}
+			}
+		}
+	}
+
+	public override void Clear()
+	{
+		rotations.Clear();
+		translations.Clear();
 	}
 }
 

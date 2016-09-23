@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityStandardAssets.Characters.FirstPerson;
+using System.Collections.Generic;
 
 public enum RecordingState
 {
@@ -24,6 +25,9 @@ public abstract class Recorder : MonoBehaviour
 
 	public virtual void StartRecording()
 	{
+		// Clear any previous recordings
+		Clear();
+
 		// Can only start recording from Inactive state
 		if (State != RecordingState.Inactive) {
 			throw new UnityException("State must be 'Inactive' to start a new recording.");
@@ -91,6 +95,15 @@ public abstract class Recorder : MonoBehaviour
 			return 0.0f;
 		}
 	}
+
+	// This must be implemented by derived class to prepare a timeline ready to save to a file
+	public abstract List<Recording.Timeline> GetTimelines();
+
+	// This must be implemented by derived class to apply saved timeline
+	public abstract void SetTimelines(List<Recording.Timeline> timelines);
+
+	// This must be implemented by derived classes to clear any stored recordings
+	public abstract void Clear();
 }
 
 

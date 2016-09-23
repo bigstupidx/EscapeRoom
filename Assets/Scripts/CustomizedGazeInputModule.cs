@@ -2,7 +2,8 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CustomizedGazeInputModule : GazeInputModule {
+public class CustomizedGazeInputModule : GazeInputModule
+{
 	public override void Process()
 	{
 		// Only call base class Process function if the script is enabled.

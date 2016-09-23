@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 public class RecordingManager : MonoBehaviour
 {
@@ -141,7 +142,7 @@ public class RecordingManager : MonoBehaviour
 		State = RecordingState.Inactive;
 	}
 
-	public void StartPlaybackButtonPressed()
+	public void SaveRecordingButtonPressed()
 	{
 		if (State == RecordingState.Recording) {
 			RecordingManager.StopRecording();
@@ -149,6 +150,68 @@ public class RecordingManager : MonoBehaviour
 			RecordingManager.StopPlayback();
 		}
 
+		Recording recording = GetRecording();
+		recording.Save("testRecording.xml");
+	}
+
+	public void LoadRecordingButtonPressed()
+	{
+		if (State == RecordingState.Recording) {
+			RecordingManager.StopRecording();
+		} else if (State == RecordingState.Playing) {
+			RecordingManager.StopPlayback();
+		}
+
+		Recording recording = Recording.Load("testRecording.xml");
+		SetRecording(recording);
+
 		RecordingManager.StartPlayback();
+	}
+
+	public Recording GetRecording()
+	{
+		Recording recording = new Recording();
+
+		// Find all Recorder objects in the scene and add their timelines to the recording
+		foreach (object obj in Object.FindObjectsOfType(typeof(Recorder))) {
+			Recorder recorder = obj as Recorder;
+
+			if (recorder != null) {
+				foreach (Recording.Timeline t in recorder.GetTimelines()) {
+					recording.Timelines.Add(t);
+				}
+			}
+		}
+
+		return recording;
+	}
+
+	public void SetRecording(Recording recording)
+	{
+		// Build dictionary of names from the recordings by type
+		Dictionary<string, List<Recording.Timeline>> timelines = new Dictionary<string, List<Recording.Timeline>>();
+
+		foreach (Recording.Timeline t in recording.Timelines) {
+			List<Recording.Timeline> list = null;
+			if (!timelines.TryGetValue(t.ObjectName, out list)) {
+				list = new List<Recording.Timeline>();
+			}
+
+			list.Add(t);
+			timelines[t.ObjectName] = list;
+		}
+
+		// Find all Recorder objects in the scene and apply a timeline if it matches the name
+		foreach (object obj in Object.FindObjectsOfType(typeof(Recorder))) {
+			Recorder recorder = obj as Recorder;
+			if (recorder != null) {
+				List<Recording.Timeline> list = null;
+				if (timelines.TryGetValue(recorder.name, out list)) {
+					recorder.SetTimelines(list);
+				} else {
+					recorder.Clear();
+				}
+			}
+		}
 	}
 }

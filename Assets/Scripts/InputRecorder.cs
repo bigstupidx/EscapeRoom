@@ -6,28 +6,7 @@ using System.Collections.Generic;
 
 public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
-	private struct RecordedEvent
-	{
-		// The time the event occured, relative to the start of the recording in seconds
-		public float Time { get; set; }
-
-		// The type of event that occured
-		public EventType Type { get; set; }
-
-		// The data from the event
-		public PointerEventData Data { get; set; }
-	}
-
-	private enum EventType
-	{
-		OnPointerEnter,
-		OnPointerExit,
-		OnPointerDown,
-		OnPointerUp,
-		OnPointerClick
-	};
-
-	Queue<RecordedEvent> events = new Queue<RecordedEvent>();
+	Queue<Recording.RecordedEvent> events = new Queue<Recording.RecordedEvent>();
 
 	// Use this for initialization
 	void Start()
@@ -42,7 +21,7 @@ public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler
 			float playbackTime = GetRelativeTime();
 
 			while (events.Count > 0) {
-				RecordedEvent evt = events.Peek();
+				Recording.RecordedEvent evt = events.Peek();
 
 				if (evt.Time <= playbackTime) {
 					// Dequeue and dispatch the event since its time has come
@@ -55,44 +34,35 @@ public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler
 		}
 	}
 
-	private void DispatchEvent(RecordedEvent evt)
+	private void DispatchEvent(Recording.RecordedEvent evt)
 	{
 		EventSystem eventSystem = Object.FindObjectOfType(typeof(EventSystem)) as EventSystem;
 
 		switch (evt.Type) {
-		case EventType.OnPointerEnter:
+		case Recording.EventType.OnPointerEnter:
 			ExecuteEvents.Execute(this.gameObject, new PointerEventData(eventSystem), ExecuteEvents.pointerEnterHandler);
 			break;
-		case EventType.OnPointerExit:
+		case Recording.EventType.OnPointerExit:
 			ExecuteEvents.Execute(this.gameObject, new PointerEventData(eventSystem), ExecuteEvents.pointerExitHandler);
 			break;
-		case EventType.OnPointerDown:
+		case Recording.EventType.OnPointerDown:
 			ExecuteEvents.Execute(this.gameObject, new PointerEventData(eventSystem), ExecuteEvents.pointerDownHandler);
 			break;
-		case EventType.OnPointerUp:
+		case Recording.EventType.OnPointerUp:
 			ExecuteEvents.Execute(this.gameObject, new PointerEventData(eventSystem), ExecuteEvents.pointerUpHandler);
 			break;
-		case EventType.OnPointerClick:
+		case Recording.EventType.OnPointerClick:
 			ExecuteEvents.Execute(this.gameObject, new PointerEventData(eventSystem), ExecuteEvents.pointerClickHandler);
 			break;
 		}
 	}
 
-	public override void StartRecording()
-	{
-		// Clear any previously recorded events
-		events.Clear();
-
-		base.StartRecording();
-	}
-
 	public void OnPointerEnter(PointerEventData eventData)
 	{
 		if (State == RecordingState.Recording) {
-			events.Enqueue(new RecordedEvent() {
+			events.Enqueue(new Recording.RecordedEvent() {
 				Time = GetRelativeTime(),
-				Type = EventType.OnPointerEnter,
-				Data = eventData
+				Type = Recording.EventType.OnPointerEnter
 			});
 		}
 	}
@@ -100,10 +70,9 @@ public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler
 	public void OnPointerExit(PointerEventData eventData)
 	{
 		if (State == RecordingState.Recording) {
-			events.Enqueue(new RecordedEvent() {
+			events.Enqueue(new Recording.RecordedEvent() {
 				Time = GetRelativeTime(),
-				Type = EventType.OnPointerExit,
-				Data = eventData
+				Type = Recording.EventType.OnPointerExit
 			});
 		}
 	}
@@ -111,10 +80,9 @@ public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler
 	public void OnPointerDown(PointerEventData eventData)
 	{
 		if (State == RecordingState.Recording) {
-			events.Enqueue(new RecordedEvent() {
+			events.Enqueue(new Recording.RecordedEvent() {
 				Time = GetRelativeTime(),
-				Type = EventType.OnPointerDown,
-				Data = eventData
+				Type = Recording.EventType.OnPointerDown
 			});
 		}
 	}
@@ -122,10 +90,9 @@ public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler
 	public void OnPointerUp(PointerEventData eventData)
 	{
 		if (State == RecordingState.Recording) {
-			events.Enqueue(new RecordedEvent() {
+			events.Enqueue(new Recording.RecordedEvent() {
 				Time = GetRelativeTime(),
-				Type = EventType.OnPointerUp,
-				Data = eventData
+				Type = Recording.EventType.OnPointerUp
 			});
 		}
 	}
@@ -133,12 +100,45 @@ public class InputRecorder : Recorder, IPointerEnterHandler, IPointerExitHandler
 	public void OnPointerClick(PointerEventData eventData)
 	{
 		if (State == RecordingState.Recording) {
-			events.Enqueue(new RecordedEvent() {
+			events.Enqueue(new Recording.RecordedEvent() {
 				Time = GetRelativeTime(),
-				Type = EventType.OnPointerClick,
-				Data = eventData
+				Type = Recording.EventType.OnPointerClick
 			});
 		}
+	}
+
+	public override List<Recording.Timeline> GetTimelines()
+	{
+		List<Recording.Timeline> result = new List<Recording.Timeline>();
+		Recording.InputTimeline timeline = new Recording.InputTimeline();
+		timeline.ObjectName = this.name;
+
+		foreach (Recording.RecordedEvent evt in events) {
+			timeline.Events.Add(evt);
+		}
+
+		result.Add(timeline);
+		return result;
+	}
+
+	public override void SetTimelines(List<Recording.Timeline> timelines)
+	{
+		Clear();
+
+		foreach (Recording.Timeline t in timelines) {
+			Recording.InputTimeline inputTimeline = t as Recording.InputTimeline;
+
+			if (inputTimeline != null) {
+				foreach (Recording.RecordedEvent evt in inputTimeline.Events) {
+					this.events.Enqueue(evt);
+				}
+			}
+		}
+	}
+
+	public override void Clear()
+	{
+		events.Clear();
 	}
 }
 
