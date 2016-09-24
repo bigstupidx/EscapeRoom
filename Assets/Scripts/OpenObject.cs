@@ -9,11 +9,14 @@ public class OpenObject : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (GameVariables.keyCount >= 1)
+        
+        if (GameVariables.keyCount >= 1 && !GameVariables.drawerIsOpen)
         {
             gameObject.GetComponent<Animation>().Play();
             GameVariables.drawerIsOpen = true;
         }
+
+        
     }
 
 }
