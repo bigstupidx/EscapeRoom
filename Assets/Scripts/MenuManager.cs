@@ -38,7 +38,7 @@ public class MenuManager : MonoBehaviour {
 		RecordingManager.StartupState = RecordingState.Playing;
 		RecordingManager.StartupPlaybackFileName = "testRecording.xml";
 
-		SceneManager.LoadScene("GameScene");
+		SceneManager.LoadScene("CSC495Demo");
 
 		//recordingManager.LoadRecordingButtonPressed();
 		// Subscribe to iteration complete event with code that resets the scene
@@ -48,7 +48,7 @@ public class MenuManager : MonoBehaviour {
 		
 	void RecordingManager_IterationComplete ()
 	{
-		SceneManager.LoadScene("GameScene");
+		SceneManager.LoadScene("CSC495Demo");
 	}
 
 	void RecordingManager_PlaybackComplete ()
