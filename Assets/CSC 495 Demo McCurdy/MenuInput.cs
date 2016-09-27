@@ -18,7 +18,6 @@ public class MenuInput : MonoBehaviour {
             CancelInvoke("countDown");
             remaining = 2;
             GetComponent<Button>().onClick.Invoke();
-            print("works correctly!");
         }
     }
 

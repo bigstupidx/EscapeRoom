@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
+using System.Collections.Generic;
 
 public class Targets : MonoBehaviour {
     private int microwave;
@@ -8,14 +10,22 @@ public class Targets : MonoBehaviour {
     private int lamp;
     private int tv;
     private int refrigerator;
+    private bool keyFound;
     public Targets()
     {
+        keyFound = false;
         microwave = 1;
         toilet = 2;
         trash = 3;
         lamp = 4;
         tv = 5;
         refrigerator = 6;
+    }
+    public bool getKeyFound(){
+        return keyFound;
+    }
+    public void setKeyFound(bool temp){
+	    keyFound = temp;
     }
     public int getObject(string name)
     {

@@ -9,7 +9,7 @@ public class MenuManager : MonoBehaviour {
 
 	public void PlayButtonPressed()
     {
-		SceneManager.LoadScene("GameScene");
+		SceneManager.LoadScene("CSC495Demo");
 		RecordingManager.StartRecording ();
 	}
 
