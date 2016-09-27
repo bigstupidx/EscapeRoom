@@ -15,7 +15,7 @@ public class MenuManager : MonoBehaviour {
 
 	public void RecordingsButtonPressed()
     {
-        SceneManager.LoadScene("RecordingsMenuScene");
+        SceneManager.LoadScene("RecordingSavesMenu");
     }
 
 	public void SettingsButtonPressed()
@@ -32,6 +32,7 @@ public class MenuManager : MonoBehaviour {
     {
 		SceneManager.LoadScene("MenuScene");
     }
+
 
     public  void ReplayRecordingButtonPressed()
     {
