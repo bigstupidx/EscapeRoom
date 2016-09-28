@@ -10,6 +10,7 @@ public class Targets : MonoBehaviour {
     private int lamp;
     private int tv;
     private int refrigerator;
+    private int drawerDoor;
     private bool keyFound;
     public Targets()
     {
@@ -20,6 +21,7 @@ public class Targets : MonoBehaviour {
         lamp = 4;
         tv = 5;
         refrigerator = 6;
+        drawerDoor = 7;
     }
     public bool getKeyFound(){
         return keyFound;
@@ -41,6 +43,8 @@ public class Targets : MonoBehaviour {
             return getTV();
         if (name.Equals("Refrigerator"))
             return getRefrigerator();
+        if (name.Equals("Drawer_Big2"))
+            return getDrawerDoor();
         return 0;
     }
 	private int getMicrowave()
@@ -71,5 +75,10 @@ public class Targets : MonoBehaviour {
     private int getRefrigerator()
     {
         return refrigerator;
+    }
+
+    private int getDrawerDoor()
+    {
+        return drawerDoor;
     }
 }
