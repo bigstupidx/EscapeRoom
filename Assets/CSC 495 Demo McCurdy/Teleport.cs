@@ -58,8 +58,9 @@ public class Teleport : MonoBehaviour, IGvrGazeResponder {
         if(targets.getObject(selObject.name) == 5)
         {
             key.setKeyActive();
+            GameVariables.keyCount++;
             notifications.text = "You found the key!";
-        }else
+        } else
         {
 
             notifications.text = "Nothing Here.";
