@@ -7,22 +7,25 @@ public delegate void PlaybackCompleteHandler();
 
 public class RecordingManager : MonoBehaviour
 {
-	public static event PlaybackCompleteHandler IterationComplete;
-
 	public static event PlaybackCompleteHandler PlaybackComplete;
 
-	public static RecordingState StartupState { get; set; }
-
-	public static string StartupPlaybackFileName { get; set; }
+	/// <summary>
+	/// If this is set prior to a scene loading, the recording manager within the scene will begin playing back the recording once the scene loads.
+	/// It is also used as a place to store recordings that have been saved between scenes.
+	/// </summary>
+	/// <value>The saved recording.</value>
+	public static Recording SavedRecording { get; set; }
 
 	// Use this for initialization
 	void Start()
 	{
-		if (StartupState == RecordingState.Playing) {
-			Recording recording = Recording.Load(StartupPlaybackFileName);
-			RecordingManager.SetRecording(recording);
+		// Check if a recording has been set
+		if (SavedRecording != null) {
+			// Recording is set, so play it back.
+			RecordingManager.SetRecordingOnActiveScene(SavedRecording);
 			StartPlayback();
-		} else if (StartupState == RecordingState.Recording) {
+		} else {
+			// Recording is not set, so start a new recording.
 			StartRecording();
 		}
 	}
@@ -41,20 +44,10 @@ public class RecordingManager : MonoBehaviour
 		if (State == RecordingState.Playing) {
 			if (Time.realtimeSinceStartup - playbackStartTime > playbackLength) {
 				StopPlayback();
-				if (remainingIterations > 0) {
-					StartPlayback();
-					remainingIterations--;
 
-					// Fire an iteration complete event so that subscribed classes can react (for example, to reset the world)
-					if (IterationComplete != null) {
-						IterationComplete();
-					}
-				} else {
-
-					// Fire a playback complete event so that subscribed classes can react (for example, to show a screen with recorded stats)
-					if (PlaybackComplete != null) {
-						PlaybackComplete();
-					}
+				// Fire a playback complete event so that subscribed classes can react (for example, to show a screen with recorded stats)
+				if (PlaybackComplete != null) {
+					PlaybackComplete();
 				}
 			}
 		}
@@ -111,20 +104,13 @@ public class RecordingManager : MonoBehaviour
 
 	private static float playbackStartTime = 0.0f;
 	private static float playbackLength = 0.0f;
-	private static int remainingIterations = 0;
 
-	public static void StartPlayback(int iterations = 1)
+	public static void StartPlayback()
 	{
 		// Can only start recording from Inactive state
 		if (State != RecordingState.Inactive) {
 			throw new UnityException("State must be 'Inactive' to start playback.");
 		}
-
-		if (iterations < 1) {
-			throw new UnityException("Iteration count must be one or more");
-		}
-
-		remainingIterations = iterations - 1;
 
 		playbackStartTime = Time.realtimeSinceStartup;
 
@@ -198,47 +184,7 @@ public class RecordingManager : MonoBehaviour
 		State = RecordingState.Inactive;
 	}
 
-	public void SaveRecordingButtonPressed()
-	{
-		if (State == RecordingState.Recording) {
-			RecordingManager.StopRecording();
-		} else if (State == RecordingState.Playing) {
-			RecordingManager.StopPlayback();
-		}
-
-		Recording recording = GetRecording();
-		recording.Save("testRecording.xml");
-	}
-
-	public void LoadRecordingButtonPressed()
-	{
-		if (State == RecordingState.Recording) {
-			RecordingManager.StopRecording();
-		} else if (State == RecordingState.Playing) {
-			RecordingManager.StopPlayback();
-		}
-
-		// Subscribe to iteration complete event with code that resets the scene
-		IterationComplete += RecordingManager_IterationComplete;
-
-		Recording recording = Recording.Load("testRecording.xml");
-		SetRecording(recording);
-
-		RecordingManager.StartPlayback(2);
-	}
-
-
-	void RecordingManager_IterationComplete ()
-	{
-		GameObject cube = GameObject.Find("Cube");
-		Teleport teleport = cube.GetComponent(typeof(Teleport)) as Teleport;
-		teleport.Reset();
-
-		// Unsubscribe
-		IterationComplete -= RecordingManager_IterationComplete;
-	}
-
-	public static Recording GetRecording()
+	public static Recording GetRecordingFromActiveScene()
 	{
 		Recording recording = new Recording();
 
@@ -256,7 +202,7 @@ public class RecordingManager : MonoBehaviour
 		return recording;
 	}
 
-	public static void SetRecording(Recording recording)
+	public static void SetRecordingOnActiveScene(Recording recording)
 	{
 		// Build dictionary of names from the recordings by type
 		Dictionary<string, List<Recording.Timeline>> timelines = new Dictionary<string, List<Recording.Timeline>>();
