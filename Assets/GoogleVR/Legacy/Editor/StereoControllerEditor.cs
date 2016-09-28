@@ -104,7 +104,7 @@ public class StereoControllerEditor : Editor {
         Undo.RegisterCreatedObjectUndo(eye.gameObject, ACTION_NAME);
       } else {
         Undo.RecordObject(eye.GetComponent<Camera>(), ACTION_NAME);
-        eye.CopyCameraAndMakeSideBySide(controller, 0, 0);
+        eye.CopyCameraAndMakeSideBySide(controller);
       }
     }
   }
