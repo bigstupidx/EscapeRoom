@@ -18,16 +18,20 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Collider))]
-public class Teleport : MonoBehaviour, IGvrGazeResponder {
+public class LookSelector : MonoBehaviour, IGvrGazeResponder {
   private Vector3 startingPosition;
     public GameObject selObject;
     private int remaining = 3;
     private Color objColor;
     public Targets targets;
+    public KeyScript key;
+    public Text notifications;
   void Start() {
         startingPosition = transform.localPosition;
         objColor = selObject.GetComponent<MeshRenderer>().material.color;
-    SetGazedAt(false);
+        targets = new Targets();
+		SetGazedAt(false);
+        notifications.text = "";
   }
   void LateUpdate() {
     GvrViewer.Instance.UpdateState();
@@ -44,7 +48,6 @@ public class Teleport : MonoBehaviour, IGvrGazeResponder {
         {
             CancelInvoke("countDown");
             remaining = 3;
-            print("works correctly!");
             var pointer = new PointerEventData(EventSystem.current);
             ExecuteEvents.Execute(GetComponent<Renderer>().gameObject, pointer, ExecuteEvents.pointerClickHandler);
         }
@@ -54,7 +57,13 @@ public class Teleport : MonoBehaviour, IGvrGazeResponder {
         print(targets.getObject(selObject.name));
         if(targets.getObject(selObject.name) == 5)
         {
-            print("You Win!");
+            key.setKeyActive();
+            GameVariables.keyCount++;
+            notifications.text = "You found the key!";
+        } else
+        {
+
+            notifications.text = "Nothing Here.";
         }
     }
   public void SetGazedAt(bool gazedAt) {
@@ -65,7 +74,7 @@ public class Teleport : MonoBehaviour, IGvrGazeResponder {
         {
             CancelInvoke("countDown");
             remaining = 3;
-            print("reset");
+            notifications.text = "";
         }
     }
 

@@ -14,25 +14,16 @@
 
 using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Collider))]
 public class Teleport : MonoBehaviour, IGvrGazeResponder {
   private Vector3 startingPosition;
-    public GameObject selObject;
-    private int remaining = 3;
-    private Color objColor;
-    public Targets targets;
-    public KeyScript key;
-    public Text notifications;
+
   void Start() {
-        startingPosition = transform.localPosition;
-        objColor = selObject.GetComponent<MeshRenderer>().material.color;
-        targets = new Targets();
-		SetGazedAt(false);
-        notifications.text = "";
+    startingPosition = transform.localPosition;
+    SetGazedAt(false);
   }
+
   void LateUpdate() {
     GvrViewer.Instance.UpdateState();
     if (GvrViewer.Instance.BackButtonPressed) {
@@ -40,43 +31,17 @@ public class Teleport : MonoBehaviour, IGvrGazeResponder {
     }
   }
 
-  public void countDown()
-    {
-        remaining--;
-        GetComponent<Renderer>().material.color = remaining%2 == 1 ? Color.magenta : Color.yellow;
-        if (remaining <= 0)
-        {
-            CancelInvoke("countDown");
-            remaining = 3;
-            var pointer = new PointerEventData(EventSystem.current);
-            ExecuteEvents.Execute(GetComponent<Renderer>().gameObject, pointer, ExecuteEvents.pointerClickHandler);
-        }
-    }
-  public void SearchKey()
-    {
-        print(targets.getObject(selObject.name));
-        if(targets.getObject(selObject.name) == 5)
-        {
-            key.setKeyActive();
-            GameVariables.keyCount++;
-            notifications.text = "You found the key!";
-        } else
-        {
-
-            notifications.text = "Nothing Here.";
-        }
-    }
   public void SetGazedAt(bool gazedAt) {
-    GetComponent<Renderer>().material.color = gazedAt ? Color.green : objColor;
-        if (gazedAt)
-            InvokeRepeating("countDown", 1, 1);
-        else
+    if (gazedAt == true)
         {
-            CancelInvoke("countDown");
-            remaining = 3;
-            notifications.text = "";
+            GetComponent<Renderer>().material.color = Color.green;
         }
-    }
+    else
+        {
+            GetComponent<Renderer>().material.color = Color.yellow;
+        }
+    //GetComponent<Renderer>().material.color = gazedAt ? Color.green : Color.;
+  }
 
   public void Reset() {
     transform.localPosition = startingPosition;
@@ -110,6 +75,20 @@ public class Teleport : MonoBehaviour, IGvrGazeResponder {
     direction.y = Mathf.Clamp(direction.y, 0.5f, 1f);
     float distance = 2 * Random.value + 1.5f;
     transform.localPosition = direction * distance;
+  }
+
+  public void pickUp() {
+    GameVariables.keyCount += 1;
+    Destroy(gameObject);
+  }
+
+  public void openDrawer() {
+    if (GameVariables.keyCount >= 1)
+        {
+            GetComponent<Renderer>().material.color = Color.blue;
+        }
+        
+
   }
 
   #region IGvrGazeResponder implementation
