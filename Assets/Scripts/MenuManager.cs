@@ -47,6 +47,9 @@ public class MenuManager : MonoBehaviour
 		string fileName = FileNameFromSlotNumber(slot);
 		RecordingManager.SavedRecording = Recording.Load(fileName);
 
+		// Subscribe to event telling us when playback is complete
+		RecordingManager.PlaybackComplete += RecordingManager_PlaybackComplete;
+
 		// Load the game scene
 		SceneManager.LoadScene("CSC495Demo");
 	}

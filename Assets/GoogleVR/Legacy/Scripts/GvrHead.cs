@@ -99,6 +99,11 @@ public class GvrHead : MonoBehaviour {
 
   // Compute new head pose.
   private void UpdateHead() {
+	// Don't update while recording manager is playing
+	if (RecordingManager.State == RecordingState.Playing) {
+		return;
+	}
+
     if (updated) {  // Only one update per frame, please.
       return;
     }
