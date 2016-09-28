@@ -18,7 +18,7 @@ public class Recording
 	public void Save(string fileName)
 	{
 		var serializer = new XmlSerializer(typeof(Recording));
-		using (var stream = new FileStream(fileName, FileMode.Create)) {
+		using (var stream = new FileStream(Application.persistentDataPath + "\\" + fileName, FileMode.Create)) {
 			serializer.Serialize(stream, this);
 		}
 	}
@@ -26,7 +26,7 @@ public class Recording
 	public static Recording Load(string fileName)
 	{
 		var serializer = new XmlSerializer(typeof(Recording));
-		using (var stream = new FileStream(fileName, FileMode.Open)) {
+			using (var stream = new FileStream(Application.persistentDataPath + "\\" + fileName, FileMode.Open)) {
 			return serializer.Deserialize(stream) as Recording;
 		}
 	}
