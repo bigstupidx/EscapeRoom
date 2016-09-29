@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityStandardAssets.Characters.FirstPerson;
 
 public class PositionAndOrientationRecorder : MonoBehaviour
 {
@@ -124,16 +123,16 @@ public class PositionAndOrientationRecorder : MonoBehaviour
 			playbackStartTime = Time.realtimeSinceStartup;
 
 			// Disable controls
-			FirstPersonController fpc = this.GetComponent(typeof(FirstPersonController)) as FirstPersonController;
-			if (fpc != null) {
-				fpc.enabled = false;
-			}
+			//FirstPersonController fpc = this.GetComponent(typeof(FirstPersonController)) as FirstPersonController;
+			//if (fpc != null) {
+			//	fpc.enabled = false;
+			//}
 		} else {
 			// Reenable controls
-			FirstPersonController fpc = this.GetComponent(typeof(FirstPersonController)) as FirstPersonController;
-			if (fpc != null) {
-				fpc.enabled = true;
-			}
+			//FirstPersonController fpc = this.GetComponent(typeof(FirstPersonController)) as FirstPersonController;
+			//if (fpc != null) {
+			//	fpc.enabled = true;
+			//}
 		}
 
 		// Sample at begining and end of playback
