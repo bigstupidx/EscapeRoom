@@ -7,33 +7,40 @@ public delegate void PlaybackCompleteHandler();
 
 public class RecordingManager : MonoBehaviour
 {
+	/// <summary>
+	/// This event will be triggered when a recording that is being played back finishes playing.
+	/// </summary>
 	public static event PlaybackCompleteHandler PlaybackComplete;
 
-	// Use this for initialization
-	void Start()
-	{
-//		// Check if a recording has been set
-//		if (SavedRecording != null) {
-//			// Recording is set, so play it back.
-//			RecordingManager.SetRecordingOnActiveScene(SavedRecording);
-//			StartPlayback();
-//		} else {
-//			// Recording is not set, so start a new recording.
-//			StartRecording();
-//		}
+	/// <summary>
+	/// Storage for RecordingState property.
+	/// </summary>
+	private static RecordingState _state = RecordingState.Inactive;
+
+	/// <summary>
+	/// Tracks the current state of the RecordingManager.  It must transition from Inactive > Playing > Inactive or from Inactive > Recording > Inactive
+	/// </summary>
+	public static RecordingState State {
+		get { return _state; }
+		private set { _state = value; }
 	}
-	
-	// Update is called once per frame
+
+	/// <summary>
+	/// Called once per frame.  It is used to update the state of the recording during playback and trigger the PlaybackComplete event when playback is done.
+	/// </summary>
 	void Update()
 	{
+		// This loop is here because I decided to delay deactivation of GazeInputModules until the next frame.  It seemed to be causing problems to
+		// deactivate them when StartPlayback was called.
 		foreach (GazeInputModule gim in modulesToDeactivate) {
 			gim.DeactivateModule();
 			gim.enabled = false;
 		}
 
+		// Clear the list since we have now deactivated all of them
 		modulesToDeactivate.Clear();
 
-		// Check if recording is done
+		// Now the main task of this function - Check if playback is done
 		if (State == RecordingState.Playing) {
 			if (Time.realtimeSinceStartup - playbackStartTime > playbackLength) {
 				StopPlayback();
@@ -46,13 +53,12 @@ public class RecordingManager : MonoBehaviour
 		}
 	}
 
-	private static RecordingState _state = RecordingState.Inactive;
-
-	public static RecordingState State {
-		get { return _state; }
-		private set { _state = value; }
-	}
-
+	/// <summary>
+	/// Starts recording on the current scene.  It iterates through all Recorder scripts attached to objects in the scene and tells them
+	/// to start recording, so it won't do anything unless there are Recorder scripts in the scene.
+	///
+	/// May only be called when RecordingManager is in Inactive state. (You can't start recording if you are playing)
+	/// </summary>
 	public static void StartRecording()
 	{
 		// Can only start recording from Inactive state
@@ -72,6 +78,12 @@ public class RecordingManager : MonoBehaviour
 		State = RecordingState.Recording;
 	}
 
+	/// <summary>
+	/// Stops recording on the current scene.  It iterates through all Recorder scripts attached to objects in the scene and tells them
+	/// to stop recording, so it won't do anything unless there are Recorder scripts in the scene.
+	///
+	/// May only be called when RecordingManager is in Recording state. (It can't stop recording if you didn't start or is playing)
+	/// </summary>
 	public static void StopRecording()
 	{
 		// Can only stop recording from Recording state
@@ -90,17 +102,17 @@ public class RecordingManager : MonoBehaviour
 		// Set new state value
 		State = RecordingState.Inactive;
 	}
-
-	// Can't deactivate this module during the click event or unity will hang because it is trying to wait for the click to finish before deactivating.
-	// Track it here and deactivate during next update.
-	private static List<GazeInputModule> modulesToDeactivate = new List<GazeInputModule>();
-
-	private static float playbackStartTime = 0.0f;
-	private static float playbackLength = 0.0f;
-
+		
+	/// <summary>
+	/// Starts playback on the current scene.  It iterates through all Recorder scripts attached to objects in the scene and tells them
+	/// to start playing, so it won't do anything unless there are Recorder scripts in the scene.  When playback is done, the PlaybackComplete
+	/// event will be fired.  If a recording hasn't been loaded into any recorder in the scene, this will happen immediately.
+	/// 
+	/// May only be called when RecordingManager is in Inactive state.  (It can't start playing if it's already playing or recording)
+	/// </summary>
 	public static void StartPlayback()
 	{
-		// Can only start recording from Inactive state
+		// Can only start playback from Inactive state
 		if (State != RecordingState.Inactive) {
 			throw new UnityException("State must be 'Inactive' to start playback.");
 		}
@@ -141,11 +153,23 @@ public class RecordingManager : MonoBehaviour
 		State = RecordingState.Playing;
 	}
 
+	/// <summary>
+	/// Stops playback on the current scene.  It iterates through all Recorder scripts attached to objects in the scene and tells them
+	/// to stop playing, so it won't do anything unless there are Recorder scripts in the scene.  The PlaybackComplete event will not
+	/// fire if this is called before playback is complete.
+	/// 
+	/// May be called when RecordingManager is in Inactive or Playing state. (It can't stop playing if it's recording).  Calling when Inactive does nothing, but is harmless.
+	/// </summary>
 	public static void StopPlayback()
 	{
-		// Can only start recording from Inactive state
+		// Calling this when the state is "inactive" is harmless
+		if (State == RecordingState.Inactive) {
+			return;
+		}
+
+		// Otherwise, state should be "Playing" in order to stop playback.
 		if (State != RecordingState.Playing) {
-			throw new UnityException("State must be 'Playing' to stop playback.");
+			throw new UnityException("State must be 'Playing' or 'Inactive' to stop playback.");
 		}
 
 		// Find all Recorder objects in the scene and tell them to stop playing
@@ -177,6 +201,12 @@ public class RecordingManager : MonoBehaviour
 		State = RecordingState.Inactive;
 	}
 
+	/// <summary>
+	/// Creates a Recording object from the current scene which can be saved to a file.  It does this by iterating through all
+	/// the recorders in the scene and asking them to create savable timelines, which it adds to the list of timelines in the
+	/// recording object.
+	/// </summary>
+	/// <returns>The recording from active scene.</returns>
 	public static Recording GetRecordingFromActiveScene()
 	{
 		Recording recording = new Recording();
@@ -195,6 +225,13 @@ public class RecordingManager : MonoBehaviour
 		return recording;
 	}
 
+	/// <summary>
+	/// Copies the data from a Recording object that may have been loaded form a file or a different scene into the recorders attached to
+	/// objects in the current scene.  The recording can then be played back by calling StartPlayback.  Timelines in the recording are
+	/// copied to recorders attached to objects by name, so the names in the scene must be unique and match what they were at the time
+	/// of recording.  Mismatched names are ignored.
+	/// </summary>
+	/// <param name="recording">Recording.</param>
 	public static void SetRecordingOnActiveScene(Recording recording)
 	{
 		// Build dictionary of names from the recordings by type
@@ -223,4 +260,18 @@ public class RecordingManager : MonoBehaviour
 			}
 		}
 	}
+
+	// Can't deactivate this module during the click event or unity will hang because it is trying to wait for the click to finish before deactivating.
+	// Track it here and deactivate during next update.
+	private static List<GazeInputModule> modulesToDeactivate = new List<GazeInputModule>();
+
+	/// <summary>
+	/// The time when playback was started, in seconds.
+	/// </summary>
+	private static float playbackStartTime = 0.0f;
+
+	/// <summary>
+	/// The length of the currently playing recording, in seconds.  This is the length of the longest invididual recording in any recorder in the scene.
+	/// </summary>
+	private static float playbackLength = 0.0f;
 }
