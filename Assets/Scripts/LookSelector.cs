@@ -21,6 +21,7 @@ using UnityEngine.EventSystems;
 public class LookSelector : MonoBehaviour, IGvrGazeResponder {
   private Vector3 startingPosition;
     public GameObject selObject;
+    public GameObject copy;
     private int remaining = 3;
     private Color objColor;
     public Targets targets;
@@ -112,11 +113,15 @@ public class LookSelector : MonoBehaviour, IGvrGazeResponder {
     transform.localPosition = direction * distance;
   }
 
-  #region IGvrGazeResponder implementation
+    public void OnPointerClick()
+    {
+        
+    }
+    #region IGvrGazeResponder implementation
 
-  /// Called when the user is looking on a GameObject with this script,
-  /// as long as it is set to an appropriate layer (see GvrGaze).
-  public void OnGazeEnter() {
+    /// Called when the user is looking on a GameObject with this script,
+    /// as long as it is set to an appropriate layer (see GvrGaze).
+    public void OnGazeEnter() {
     SetGazedAt(true);
   }
 
@@ -130,6 +135,9 @@ public class LookSelector : MonoBehaviour, IGvrGazeResponder {
   public void OnGazeTrigger() {
     TeleportRandomly();
   }
-
+  public void rotateUP()
+    {
+        copy.transform.rotation.Set(copy.transform.rotation.x, 90, copy.transform.rotation.z, copy.transform.rotation.w);
+    }
   #endregion
 }
