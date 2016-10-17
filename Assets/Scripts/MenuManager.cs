@@ -12,8 +12,20 @@ public class MenuManager : MonoBehaviour
 		// Make sure that any startup recording is cleared
 		RecordingManager.SavedRecording = null;
 
+		// Get notified when the scene has finished loading
+		SceneManager.sceneLoaded += SceneManager_sceneLoadedGameplay;
+
 		// Load the game scene
 		SceneManager.LoadScene("CSC495Demo");
+	}
+
+	void SceneManager_sceneLoadedGameplay (Scene arg0, LoadSceneMode arg1)
+	{
+		// Start recording the game scene
+		RecordingManager.StartRecording();
+
+		// Unsubscribe from notification
+		SceneManager.sceneLoaded -= SceneManager_sceneLoadedGameplay;
 	}
 
 	public void RecordingsButtonPressed()
@@ -53,11 +65,23 @@ public class MenuManager : MonoBehaviour
 		string fileName = FileNameFromSlotNumber(slot);
 		RecordingManager.SavedRecording = Recording.Load(fileName);
 
+		// Get notified when the scene has finished loading
+		SceneManager.sceneLoaded += SceneManager_sceneLoadedPlaybackRecording;
+
 		// Subscribe to event telling us when playback is complete
 		RecordingManager.PlaybackComplete += RecordingManager_PlaybackComplete;
 
 		// Load the game scene
 		SceneManager.LoadScene("CSC495Demo");
+	}
+
+	void SceneManager_sceneLoadedPlaybackRecording (Scene arg0, LoadSceneMode arg1)
+	{
+		// Start playing back the recording
+		RecordingManager.StartPlayback();
+
+		// Unsubscribe from notification
+		SceneManager.sceneLoaded -= SceneManager_sceneLoadedPlaybackRecording;
 	}
 
 	public void SaveRecordingToSlotButtonPressed(int slot)

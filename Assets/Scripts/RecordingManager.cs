@@ -19,15 +19,15 @@ public class RecordingManager : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-		// Check if a recording has been set
-		if (SavedRecording != null) {
-			// Recording is set, so play it back.
-			RecordingManager.SetRecordingOnActiveScene(SavedRecording);
-			StartPlayback();
-		} else {
-			// Recording is not set, so start a new recording.
-			StartRecording();
-		}
+//		// Check if a recording has been set
+//		if (SavedRecording != null) {
+//			// Recording is set, so play it back.
+//			RecordingManager.SetRecordingOnActiveScene(SavedRecording);
+//			StartPlayback();
+//		} else {
+//			// Recording is not set, so start a new recording.
+//			StartRecording();
+//		}
 	}
 	
 	// Update is called once per frame
