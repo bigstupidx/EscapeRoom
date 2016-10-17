@@ -9,13 +9,6 @@ public class RecordingManager : MonoBehaviour
 {
 	public static event PlaybackCompleteHandler PlaybackComplete;
 
-	/// <summary>
-	/// If this is set prior to a scene loading, the recording manager within the scene will begin playing back the recording once the scene loads.
-	/// It is also used as a place to store recordings that have been saved between scenes.
-	/// </summary>
-	/// <value>The saved recording.</value>
-	public static Recording SavedRecording { get; set; }
-
 	// Use this for initialization
 	void Start()
 	{

@@ -6,11 +6,16 @@ using UnityEditor.SceneManagement;
 [ExecuteInEditMode]
 public class MenuManager : MonoBehaviour
 {
+	/// <summary>
+	/// This is used to save a recording from a scene before switching to a new scene
+	/// </summary>
+	/// <value>The saved recording.</value>
+	public static Recording SavedRecording { get; set; }
 
 	public void PlayButtonPressed()
 	{
 		// Make sure that any startup recording is cleared
-		RecordingManager.SavedRecording = null;
+		SavedRecording = null;
 
 		// Get notified when the scene has finished loading
 		SceneManager.sceneLoaded += SceneManager_sceneLoadedGameplay;
@@ -63,7 +68,7 @@ public class MenuManager : MonoBehaviour
 		// Load the recording file from disk
 		// Really we should check if the file exists and show an error message instead of just causing a file not found exception here.
 		string fileName = FileNameFromSlotNumber(slot);
-		RecordingManager.SavedRecording = Recording.Load(fileName);
+		SavedRecording = Recording.Load(fileName);
 
 		// Get notified when the scene has finished loading
 		SceneManager.sceneLoaded += SceneManager_sceneLoadedPlaybackRecording;
@@ -77,6 +82,9 @@ public class MenuManager : MonoBehaviour
 
 	void SceneManager_sceneLoadedPlaybackRecording (Scene arg0, LoadSceneMode arg1)
 	{
+		// Apply the saved recording to the scene
+		RecordingManager.SetRecordingOnActiveScene(SavedRecording);
+
 		// Start playing back the recording
 		RecordingManager.StartPlayback();
 
@@ -89,10 +97,10 @@ public class MenuManager : MonoBehaviour
 		// Save the recording file to disk
 		// Really we should be checking if the file exists and showing the user an "Are you sure?" message here.
 		string fileName = FileNameFromSlotNumber(slot);
-		RecordingManager.SavedRecording.Save(fileName);
+		SavedRecording.Save(fileName);
 
 		// Clear the recording file
-		RecordingManager.SavedRecording = null;
+		SavedRecording = null;
 
 		// Return to main menu
 		SceneManager.LoadScene("MenuScene");

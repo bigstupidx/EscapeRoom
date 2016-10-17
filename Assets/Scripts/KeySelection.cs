@@ -39,7 +39,7 @@ public class KeySelection : MonoBehaviour {
     public void winGame()
     {
 		RecordingManager.StopRecording();
-		RecordingManager.SavedRecording = RecordingManager.GetRecordingFromActiveScene();
+		MenuManager.SavedRecording = RecordingManager.GetRecordingFromActiveScene();
         SceneManager.LoadScene("WinScene");
     }
 }
