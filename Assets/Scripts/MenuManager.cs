@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEditor.SceneManagement;
 
+[ExecuteInEditMode]
 public class MenuManager : MonoBehaviour
 {
 
@@ -16,7 +18,11 @@ public class MenuManager : MonoBehaviour
 
 	public void RecordingsButtonPressed()
 	{
-		SceneManager.LoadScene("RecordingSavesMenu");
+	//	if (Application.isPlayer) {
+			SceneManager.LoadScene ("RecordingSavesMenu");
+//		} else if(Application.isEditor) {
+//			EditorSceneManager.OpenScene ("RecordingSavesMenu");
+//		}
 	}
 
 	public void SettingsButtonPressed()
