@@ -8,11 +8,10 @@ public class LockedObject : MonoBehaviour
 {
 
     private int remaining = 2;
-    public Text notifications;
+	public string notifications = string.Empty;
 
     void Start()
     {
-        notifications.text = "";
         SetGazedAt(false);
     }
 
