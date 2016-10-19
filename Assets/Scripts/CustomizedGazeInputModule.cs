@@ -34,8 +34,15 @@ public class CustomizedGazeInputModule : GazeInputModule
 
 		// Filter the result through the Selection Layer Mask
 		foreach (RaycastResult result in m_RaycastResultCache) {
-			if (result.gameObject != null && ((SelectionMask & 1 << result.gameObject.layer) != 0)) {
-				m_validRaycastCache.Add(result);
+			if (result.gameObject != null) {
+				bool hasMouseInterface = (result.gameObject.GetComponents<IPointerClickHandler>().Length > 0 ||
+				                         result.gameObject.GetComponents<IPointerEnterHandler>().Length > 0 ||
+				                         result.gameObject.GetComponents<IPointerExitHandler>().Length > 0 ||
+										 result.gameObject.GetComponents<EventTrigger>().Length > 0);
+
+				if (hasMouseInterface && ((SelectionMask & 1 << result.gameObject.layer) != 0)) {
+					m_validRaycastCache.Add(result);
+				}
 			}
 		}
 
