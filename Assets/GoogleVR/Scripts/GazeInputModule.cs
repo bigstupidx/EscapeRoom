@@ -51,8 +51,8 @@ public class GazeInputModule : BaseInputModule {
   /// The IGvrGazePointer which will be responding to gaze events.
   public static IGvrGazePointer gazePointer;
 
-  private PointerEventData pointerData;
-  private Vector2 lastHeadPose;
+  protected PointerEventData pointerData;
+  protected Vector2 lastHeadPose;
 
   // Active state
   private bool isActive = false;
@@ -123,7 +123,7 @@ public class GazeInputModule : BaseInputModule {
   }
   /// @endcond
 
-  private void CastRayFromGaze() {
+  protected virtual void CastRayFromGaze() {
     Vector2 headPose = NormalizedCartesianToSpherical(GvrViewer.Instance.HeadPose.Orientation * Vector3.forward);
 
     if (pointerData == null) {
@@ -267,7 +267,7 @@ public class GazeInputModule : BaseInputModule {
     }
   }
 
-  private Vector2 NormalizedCartesianToSpherical(Vector3 cartCoords) {
+  protected Vector2 NormalizedCartesianToSpherical(Vector3 cartCoords) {
     cartCoords.Normalize();
     if (cartCoords.x == 0)
       cartCoords.x = Mathf.Epsilon;
