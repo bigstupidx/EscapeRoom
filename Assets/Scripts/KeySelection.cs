@@ -4,42 +4,23 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
-public class KeySelection : MonoBehaviour {
+public class KeySelection : Focusable
+{
+	public void Start()
+	{
+		// Hide the key when the game starts, but leave it visible in the editor to make it easier to work with
+		this.gameObject.SetActive(false);
+	}
 
-    private int remaining = 2;
-    void Start()
-    {
-        SetGazedAt(false);
-    }
-
-    public void countDown()
-    {
-        remaining--;
-        if (remaining <= 0)
-        {
-            CancelInvoke("countDown");
-            remaining = 2;
-            var pointer = new PointerEventData(EventSystem.current);
-            ExecuteEvents.Execute(GetComponent<Renderer>().gameObject, pointer, ExecuteEvents.pointerClickHandler);
-        }
-    }
-
-    public void SetGazedAt(bool gazedAt)
-    {
-        if (gazedAt)
-            InvokeRepeating("countDown", 1, 1);
-        else
-        {
-            CancelInvoke("countDown");
-            remaining = 2;
-            print("reset");
-        }
-    }
-
-    public void winGame()
-    {
+	public override void OnPointerClick(PointerEventData eventData)
+	{
+		// Stop recording
 		RecordingManager.StopRecording();
+
+		// Save the recording into the static variable of the MenuManager
 		MenuManager.SavedRecording = RecordingManager.GetRecordingFromActiveScene();
-        SceneManager.LoadScene("WinScene");
-    }
+
+		// Load the win scene
+		SceneManager.LoadScene("WinScene");
+	}
 }

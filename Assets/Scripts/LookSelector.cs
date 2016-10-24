@@ -33,7 +33,9 @@ public class LookSelector : MonoBehaviour, IGvrGazeResponder {
         targets = new Targets();
 		SetGazedAt(false);
         notifications.text = "";
-        itemint.SetActive(false);
+		if (itemint != null) {
+			itemint.SetActive(false);
+		}
     }
   void LateUpdate() {
     GvrViewer.Instance.UpdateState();
@@ -59,7 +61,7 @@ public class LookSelector : MonoBehaviour, IGvrGazeResponder {
         print(targets.getObject(selObject.name));
         if(targets.getObject(selObject.name) == 5)
         {
-            key.setKeyActive();
+			key.enabled = true;
             GameVariables.keyCount++;
             notifications.text = "You found the key!";
         } else
