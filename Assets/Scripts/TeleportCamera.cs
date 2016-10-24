@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
-public class TeleportCamera : MonoBehaviour {
+public class TeleportCamera : MonoBehaviour, IPointerClickHandler
+{
 
     public GameObject MainCamera;
     Animation anim;
@@ -20,14 +22,16 @@ public class TeleportCamera : MonoBehaviour {
 	
 	}
 
-    public void OnPointerClick()
+    public virtual void OnPointerClick(PointerEventData eventData)
     {
         // Debug.Log(string.Format("Object {0} was clicked.", name));
-        // MainCamera.transform.position = transform.position;
-        // transform.position = new Vector3(5, 1, 8);
+        //MainCamera.transform.position = new Vector3(-3, 1, 0);
 
-        anim = MainCamera.GetComponent<Animation>();
-        anim["CameraTeleportTest"].speed = animSpeed;
-        MainCamera.GetComponent<Animation>().Play();
+        MainCamera.transform.position = new Vector3(transform.position.x, 1, transform.position.z);
+        // transform.position = new Vector3(1, 1, 8);
+
+        //anim = MainCamera.GetComponent<Animation>();
+        //anim["CameraTeleportTest"].speed = animSpeed;
+        //MainCamera.GetComponent<Animation>().Play();
     }
 }
