@@ -22,6 +22,7 @@ public class LookSelector : MonoBehaviour, IGvrGazeResponder {
   private Vector3 startingPosition;
     public GameObject selObject;
     public GameObject itemint;
+    public GameObject Ucamera;
     private int remaining = 3;
     private Color objColor;
     public Targets targets;
@@ -118,6 +119,9 @@ public class LookSelector : MonoBehaviour, IGvrGazeResponder {
 
     public void PointerClick()
     {
+        var rotationVector = itemint.transform.rotation.eulerAngles;
+        rotationVector.y = Ucamera.transform.rotation.y;
+        itemint.transform.rotation = Quaternion.Euler(rotationVector);
         itemint.SetActive(true);
     }
     #region IGvrGazeResponder implementation
