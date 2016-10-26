@@ -27,7 +27,7 @@ public class TeleportCamera : MonoBehaviour, IPointerClickHandler
         // Debug.Log(string.Format("Object {0} was clicked.", name));
         //MainCamera.transform.position = new Vector3(-3, 1, 0);
 
-        MainCamera.transform.position = new Vector3(transform.position.x, 3, transform.position.z);
+        MainCamera.transform.position = new Vector3(transform.position.x, 1.7f, transform.position.z);
         // transform.position = new Vector3(1, 1, 8);
 
         //anim = MainCamera.GetComponent<Animation>();
