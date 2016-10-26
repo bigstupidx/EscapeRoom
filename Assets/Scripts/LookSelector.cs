@@ -44,7 +44,7 @@ public class LookSelector : MonoBehaviour, IGvrGazeResponder {
       Application.Quit();
     }
   }
-
+  
   public void countDown()
     {
         remaining--;
@@ -117,13 +117,7 @@ public class LookSelector : MonoBehaviour, IGvrGazeResponder {
     transform.localPosition = direction * distance;
   }
 
-    public void PointerClick()
-    {
-        var rotationVector = itemint.transform.rotation.eulerAngles;
-        rotationVector.y = Ucamera.transform.rotation.y;
-        itemint.transform.rotation = Quaternion.Euler(rotationVector);
-        itemint.SetActive(true);
-    }
+
     #region IGvrGazeResponder implementation
 
     /// Called when the user is looking on a GameObject with this script,

@@ -5,14 +5,19 @@ public class ButtonManager : MonoBehaviour
 {
 
     public GameObject copy;
+    public GameObject selObject;
+    private Quaternion rotate;
     public GameObject itemint;
     private bool[] gaze = new bool[4];
+    private bool select;
     void Start()
     {
+        rotate = copy.transform.rotation;
         gaze[0] = false;
         gaze[1] = false;
         gaze[2] = false;
         gaze[3] = false;
+        select = false;
     }
     void Update()
     {
@@ -24,6 +29,15 @@ public class ButtonManager : MonoBehaviour
            transform.Rotate(Vector3.down * (Time.deltaTime * 45));
         else if(gaze[3])
            transform.Rotate(Vector3.up * (Time.deltaTime * 45));
+
+        if (transform.position == new Vector3(98.651f, 1.257f, 0.507f))
+        {
+            itemint.SetActive(true);
+        }
+        else
+        {
+            itemint.SetActive(false);
+        }
     }
     public void rotateUP()
     {
@@ -39,8 +53,16 @@ public class ButtonManager : MonoBehaviour
         gaze[index] = false;
     }
 
+    public void PointerClick()
+    {
+        iTween.MoveTo(selObject, iTween.Hash("position", new Vector3(98.651f, 1.257f, 0.507f), "time", 1f));
+    }
+
     public void onExitButton()
     {
         itemint.SetActive(false);
+        copy.transform.rotation = rotate;
+        iTween.MoveTo(selObject, iTween.Hash("position", new Vector3(102.85f, 1.65f, 3.48f), "time", 1f));
     }
+
 }
