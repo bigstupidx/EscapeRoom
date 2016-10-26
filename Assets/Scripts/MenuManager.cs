@@ -12,6 +12,16 @@ public class MenuManager : MonoBehaviour
 	/// <value>The saved recording.</value>
 	public static Recording SavedRecording { get; set; }
 
+	public GameObject settingsPanel;
+	public GameObject mainPanel;
+	public GameObject recordingsPanel;
+
+	void Start()
+	{
+		recordingsPanel.SetActive (false);
+		settingsPanel.SetActive (false);
+	}
+
 	public void PlayButtonPressed()
 	{
 		// Make sure that any startup recording is cleared
@@ -35,16 +45,14 @@ public class MenuManager : MonoBehaviour
 
 	public void RecordingsButtonPressed()
 	{
-	//	if (Application.isPlayer) {
-			SceneManager.LoadScene ("RecordingSavesMenu");
-//		} else if(Application.isEditor) {
-//			EditorSceneManager.OpenScene ("RecordingSavesMenu");
-//		}
+		mainPanel.SetActive (false);
+		recordingsPanel.SetActive (true);
 	}
 
 	public void SettingsButtonPressed()
 	{
-		SceneManager.LoadScene("SettingsMenuScene");
+		mainPanel.SetActive (false);
+		settingsPanel.SetActive (true);
 	}
 
 	public void QuitButtonPressed()
@@ -54,7 +62,9 @@ public class MenuManager : MonoBehaviour
 
 	public void MainMenuButtonPressed()
 	{
-		SceneManager.LoadScene("MenuScene");
+		recordingsPanel.SetActive (false);
+		settingsPanel.SetActive (false);
+		mainPanel.SetActive (true);
 	}
 
 	private string FileNameFromSlotNumber(int slot)
