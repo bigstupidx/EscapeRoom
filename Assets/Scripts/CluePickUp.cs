@@ -3,10 +3,14 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using System;
 
-public class CluePickUp : MonoBehaviour//, IPointerClickHandler
+public class CluePickUp : MonoBehaviour, IPointerClickHandler
 {
-    private Vector3 startingPosition;
+    public GameObject ClockKeyTable;
 
+    void Start()
+    {
+        ClockKeyTable = GameObject.Find("ClockKeyTable");
+    }
     /*void Update()
     {
         if (GameVariables.drawerIsOpen == true)
@@ -19,11 +23,12 @@ public class CluePickUp : MonoBehaviour//, IPointerClickHandler
 
     }*/
 
-    public void OnPointerClick() //(PointerEventData eventData)
+    public void OnPointerClick(PointerEventData eventData)
     {
         GameVariables.keyCount++;
-        GameVariables.keyDisplayTime = 2;
+        //GameVariables.keyDisplayTime = 2;
         gameObject.SetActive(false);
+        ClockKeyTable.gameObject.SetActive(true);
     }
 
 }
