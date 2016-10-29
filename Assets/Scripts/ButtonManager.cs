@@ -22,15 +22,15 @@ public class ButtonManager : MonoBehaviour
     void Update()
     {
         if (gaze[0])
-           transform.Rotate(Vector3.right * (Time.deltaTime * 45));
+           transform.Rotate(new Vector3(0,0,1) * (Time.deltaTime * 45), Space.World);
         else if (gaze[1])
-           transform.Rotate(Vector3.left * (Time.deltaTime * 45));
+           transform.Rotate(new Vector3(0,0,-1) * (Time.deltaTime * 45), Space.World);
         else if(gaze[2])
-           transform.Rotate(Vector3.down * (Time.deltaTime * 45));
+           transform.Rotate(Vector3.down * (Time.deltaTime * 45), Space.World);
         else if(gaze[3])
-           transform.Rotate(Vector3.up * (Time.deltaTime * 45));
+           transform.Rotate(Vector3.up * (Time.deltaTime * 45), Space.World);
 
-        if (transform.position == new Vector3(98.651f, 1.257f, 0.507f))
+        if (transform.position == new Vector3(1.375f, 1.28f, 0.571f))
         {
             itemint.SetActive(true);
         }
@@ -55,14 +55,14 @@ public class ButtonManager : MonoBehaviour
 
     public void PointerClick()
     {
-        iTween.MoveTo(selObject, iTween.Hash("position", new Vector3(98.651f, 1.257f, 0.507f), "time", 1f));
+        iTween.MoveTo(selObject, iTween.Hash("position", new Vector3(1.375f, 1.28f, 0.571f), "time", 1f));
     }
 
     public void onExitButton()
     {
         itemint.SetActive(false);
         copy.transform.rotation = rotate;
-        iTween.MoveTo(selObject, iTween.Hash("position", new Vector3(102.85f, 1.65f, 3.48f), "time", 1f));
+        iTween.MoveTo(selObject, iTween.Hash("position", new Vector3(8.69f, 1.65f, 3.48f), "time", 1f));
     }
 
 }
