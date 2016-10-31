@@ -10,7 +10,7 @@ public class NotificationManager : MonoBehaviour {
 
 	public Camera faceCamera;
 
-	public void ShowNotification(string message, Vector3 position)
+	public void ShowNotification(string message, Vector3 position, float scale = 1.0f)
 	{
 		// Display the message
 		if (notificationPrefab != null && notificationCanvas != null && faceCamera != null) {
@@ -21,6 +21,7 @@ public class NotificationManager : MonoBehaviour {
 			clone.transform.parent = notificationCanvas.transform;
 			clone.transform.position = position;
 			clone.transform.LookAt(position + faceCamera.transform.rotation * Vector3.forward, faceCamera.transform.rotation * Vector3.up);
+			clone.transform.localScale *= scale;
 		}
 	}
 }
