@@ -20,8 +20,6 @@ public class NotificationManager : MonoBehaviour {
 
 			clone.transform.parent = notificationCanvas.transform;
 			clone.transform.position = position;
-			//clone.transform.LookAt(faceCamera.transform, new Vector3(0, 1, 0));
-			//clone.transform.Rotate(new Vector3(0, 180, 0));
 			clone.transform.LookAt(position + faceCamera.transform.rotation * Vector3.forward, faceCamera.transform.rotation * Vector3.up);
 		}
 	}

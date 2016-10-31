@@ -3,24 +3,26 @@ using System.Collections;
 using UnityEngine.EventSystems;
 
 public class Pickup : Searchable {
-    public bool isFound;
+    
+	public bool IsFound = false;
+
+	public GameObject InventoryPosition = null;
+
     public Pickup() {
-        message = "You found a";
+        message = "You found ";
     }
-	// Use this for initialization
-	void Start () {
-        isFound = false;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	    
-	}
 
     public override void OnPointerClick(PointerEventData eventData)
     {
         base.OnPointerClick(eventData);
-        isFound = true;
-        this.gameObject.SetActive(false);
+		IsFound = true;
+
+		if (InventoryPosition == null) {
+			// No inventory position, just make the object dissappear
+			this.gameObject.SetActive(false);
+		} else {
+			// Move the object to be a child of the inventory position object
+			this.transform.parent = InventoryPosition.transform;
+		}
     }
 }
