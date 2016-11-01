@@ -6,6 +6,8 @@ public class Searchable : Focusable
 {
 	public string message;
 
+	public float Scale = 1.0f;
+
 	public Searchable()
 	{
 		message = "Nothing Here.";
