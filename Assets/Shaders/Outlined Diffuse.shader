@@ -1,7 +1,7 @@
 ﻿Shader "Outlined/Diffuse" {
 	Properties {
-		_Color ("Main Color", Color) = (.2,.2,0,0)
-		_OutlineColor ("Outline Color", Color) = (.2,.2,0,1)
+		_GlowColor ("Glow Color", Color) = (.4,.2,0,0)
+		_OutlineColor ("Outline Color", Color) = (.8,.4,0,1)
 		_Outline ("Outline width", Range (.002, 0.03)) = .007
 		_MainTex ("Base (RGB)", 2D) = "white" { }
 	}
@@ -42,14 +42,14 @@ CGPROGRAM
 #pragma surface surf Lambert
  
 sampler2D _MainTex;
-fixed4 _Color;
+fixed4 _GlowColor;
  
 struct Input {
 	float2 uv_MainTex;
 };
  
 void surf (Input IN, inout SurfaceOutput o) {
-	fixed4 c = tex2D(_MainTex, IN.uv_MainTex) + _Color;
+	fixed4 c = tex2D(_MainTex, IN.uv_MainTex) + _GlowColor;
 	o.Albedo = c.rgb;
 	o.Alpha = c.a;
 }
@@ -79,14 +79,14 @@ CGPROGRAM
 #pragma surface surf Lambert
  
 sampler2D _MainTex;
-fixed4 _Color;
+fixed4 _GlowColor;
  
 struct Input {
 	float2 uv_MainTex;
 };
  
 void surf (Input IN, inout SurfaceOutput o) {
-	fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
+	fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _GlowColor;
 	o.Albedo = c.rgb;
 	o.Alpha = c.a;
 }

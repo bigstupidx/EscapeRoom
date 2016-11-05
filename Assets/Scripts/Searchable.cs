@@ -20,8 +20,11 @@ public class Searchable : Focusable
 		// Display the message using the Notification Manager
 		NotificationManager manager = FindObjectOfType<NotificationManager>();
 
+		// Get collider component
+		Collider collider = GetComponent<Collider>();
+
 		if (manager != null) {
-			manager.ShowNotification(message, gameObject.transform.position);
+				manager.ShowNotification(message, collider.bounds);
 		}
 
 	}

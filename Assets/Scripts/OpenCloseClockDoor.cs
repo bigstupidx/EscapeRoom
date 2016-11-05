@@ -22,8 +22,7 @@ public class OpenCloseClockDoor : Searchable {
     public override void OnPointerClick(PointerEventData eventData)
     {
         NotificationManager manager = FindObjectOfType<NotificationManager>();
-
-        
+		Collider collider = GetComponent<Collider>();
 
         if (DoorOpen == false && GameVariables.bigPointerTime == 3 && GameVariables.smallPointerTime == 6)
         {
@@ -40,7 +39,7 @@ public class OpenCloseClockDoor : Searchable {
         {
             if (manager != null)
             {
-                manager.ShowNotification(message, gameObject.transform.position);
+				manager.ShowNotification(message, collider.bounds);
             }
         }
     }
