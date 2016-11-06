@@ -6,8 +6,6 @@ public class Searchable : Focusable
 {
 	public string message;
 
-	public float Scale = 1.0f;
-
 	public Searchable()
 	{
 		message = "Nothing Here.";
@@ -17,15 +15,6 @@ public class Searchable : Focusable
 	{
 		base.OnPointerClick(eventData);
 
-		// Display the message using the Notification Manager
-		NotificationManager manager = FindObjectOfType<NotificationManager>();
-
-		// Get collider component
-		Collider collider = GetComponent<Collider>();
-
-		if (manager != null) {
-				manager.ShowNotification(message, collider.bounds);
-		}
-
+		DisplayMessage(message);
 	}
 }

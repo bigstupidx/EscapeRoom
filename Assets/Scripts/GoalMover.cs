@@ -10,7 +10,7 @@ public class GoalMover : MonoBehaviour
 {
 	public float maxSpeed = 3.0f;
 
-	public float maxAcceleration = 0.1f;
+	public float maxAcceleration = 1.0f;
 
 	public float slowRadius = 3.0f;
 

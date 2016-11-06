@@ -18,6 +18,12 @@ public class Pickup : Searchable
 	public override void OnPointerClick(PointerEventData eventData)
 	{
 		base.OnPointerClick(eventData);
+
+		// If already found, do nothing
+		if (IsFound) {
+			return;
+		}
+
 		IsFound = true;
 
 		NotificationManager manager = FindObjectOfType<NotificationManager>();

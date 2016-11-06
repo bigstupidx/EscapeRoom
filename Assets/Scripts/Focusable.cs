@@ -4,25 +4,28 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(Collider))]
-public class Focusable : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
+public class Focusable : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+{
 
 	// Use this for initialization
-	void Start () {
+	void Start()
+	{
 	
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update()
+	{
 	
 	}
-		
+
 	public virtual void OnPointerClick(PointerEventData eventData)
 	{
 		// Do nothing in base implementation
 	}
 
 	private Dictionary<Material, Shader> oldShaders = new Dictionary<Material, Shader>();
-		
+
 	public virtual void OnPointerEnter(PointerEventData eventData)
 	{
 		foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true)) {
@@ -59,6 +62,24 @@ public class Focusable : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 
 				material.shader = original;
 			}
+		}
+	}
+
+	protected void DisplayMessage(string text)
+	{
+		// Do nothing if message is null or empty
+		if (string.IsNullOrEmpty(text)) {
+			return;
+		}
+
+		// Display the message using the Notification Manager
+		NotificationManager manager = FindObjectOfType<NotificationManager>();
+
+		// Get collider component
+		Collider collider = GetComponent<Collider>();
+
+		if (manager != null) {
+			manager.ShowNotification(text, collider.bounds);
 		}
 	}
 }

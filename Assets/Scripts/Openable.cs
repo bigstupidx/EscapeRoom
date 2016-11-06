@@ -54,7 +54,7 @@ public class Openable : Focusable
 	}
 
 	// Use this for initialization
-	void Start()
+	public virtual void Start()
 	{
 		// Save the initial position and rotation so we can return to it if the object is closed again
 		closedPosition = openMover.transform.position;
@@ -63,7 +63,7 @@ public class Openable : Focusable
 	}
 	
 	// Update is called once per frame
-	void Update()
+	public virtual void Update()
 	{
 	
 	}
