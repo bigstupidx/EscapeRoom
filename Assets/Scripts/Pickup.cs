@@ -44,6 +44,9 @@ public class Pickup : Searchable
 			// No inventory position, just make the object dissappear after movement finishes
 			mover.MovementComplete += Mover_MovementCompleteVanish;
 		} else {
+			// Change parent of object to inventory position
+			gameObject.transform.parent = InventoryPosition.transform;
+
 			// Move object to final position
 			mover.AddGoal(InventoryPosition.transform.position, InventoryPosition.transform.rotation);
 		}

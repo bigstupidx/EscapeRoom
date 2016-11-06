@@ -1,36 +1,57 @@
 fileFormatVersion: 2
 guid: b06b8d76eff270a47b7df4f34c14f1db
-timeCreated: 1463473975
-licenseType: Store
+timeCreated: 1478465813
+licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Mod_Globe
-    100004: Mod_Globe_Stand
-    100006: Mod_Globe_Top
-    100008: transform79
-    100010: transform80
+    100002: globeBottom
+    100004: globeStand
+    100006: globeTop
+    100008: globeTopFrame
+    100010: polySurface1
+    100012: polySurface2
+    100014: polySurface4
+    100016: transform1
+    100018: transform2
+    100020: transform3
+    100022: transform4
     400000: //RootNode
-    400002: Mod_Globe
-    400004: Mod_Globe_Stand
-    400006: Mod_Globe_Top
-    400008: transform79
-    400010: transform80
-    2300000: Mod_Globe
-    2300002: //RootNode
-    3300000: Mod_Globe
-    3300002: //RootNode
-    4300000: Mod_Globe
+    400002: globeBottom
+    400004: globeStand
+    400006: globeTop
+    400008: globeTopFrame
+    400010: polySurface1
+    400012: polySurface2
+    400014: polySurface4
+    400016: transform1
+    400018: transform2
+    400020: transform3
+    400022: transform4
+    2300000: globeBottom
+    2300002: globeStand
+    2300004: globeTop
+    2300006: globeTopFrame
+    2300008: //RootNode
+    3300000: globeBottom
+    3300002: globeStand
+    3300004: globeTop
+    3300006: globeTopFrame
+    3300008: //RootNode
+    4300000: globeStand
+    4300002: globeBottom
+    4300004: globeTopFrame
+    4300006: globeTop
     9500000: //RootNode
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
-    resampleRotations: 1
+    resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
     animationImportErrors: 
