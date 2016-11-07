@@ -15,13 +15,7 @@ namespace TestSearch {
 
         public void OnPointerClick()
         {
-            search.OnPointerClick()
-            var pointer = new PointerEventData(EventSystem.current);
-            ExecuteEvents.Execute(objection, pointer, ExecuteEvents.pointerClickHandler);
-            if (message == "Nothing here.")
-                IntegrationTest.Pass(gameObject);
-            else
-                IntegrationTest.Fail(gameObject);
+            Click(objection);
         }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
-public class ButtonManager : MonoBehaviour
+public class ButtonManager : MonoBehaviour, IPointerClickHandler
 {
 
     public GameObject copy;
@@ -53,7 +54,7 @@ public class ButtonManager : MonoBehaviour
         gaze[index] = false;
     }
 
-    public void PointerClick()
+    public virtual void OnPointerClick(PointerEventData eventData)
     {
         iTween.MoveTo(selObject, iTween.Hash("position", new Vector3(1.375f, 1.28f, 0.571f), "time", 1f));
     }

@@ -9,7 +9,7 @@ public class OpenCloseClockDoor : Searchable {
 	
     OpenCloseClockDoor()
     {
-        if (GameVariables.bigPointerTime == 3 && GameVariables.smallPointerTime == 6)
+        if (GameVariables.bigPointerTime == 6 && GameVariables.smallPointerTime == 3)
         {
             message = "You found a key!";
         }
@@ -24,7 +24,7 @@ public class OpenCloseClockDoor : Searchable {
         NotificationManager manager = FindObjectOfType<NotificationManager>();
 		Collider collider = GetComponent<Collider>();
 
-        if (DoorOpen == false && GameVariables.bigPointerTime == 3 && GameVariables.smallPointerTime == 6)
+        if (DoorOpen == false && GameVariables.bigPointerTime == 6 && GameVariables.smallPointerTime == 3)
         {
             GetComponent<Animation>().Play("DoorOpen");
             DoorOpen = true;
@@ -35,7 +35,7 @@ public class OpenCloseClockDoor : Searchable {
             GetComponent<Animation>().Play("DoorClose");
             DoorOpen = false;
         }
-        else if (DoorOpen == false && GameVariables.bigPointerTime != 3 || GameVariables.smallPointerTime != 6)
+        else if (DoorOpen == false && GameVariables.bigPointerTime != 6 || GameVariables.smallPointerTime != 3)
         {
             if (manager != null)
             {
