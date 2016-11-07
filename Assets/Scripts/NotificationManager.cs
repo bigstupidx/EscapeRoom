@@ -10,6 +10,11 @@ public class NotificationManager : MonoBehaviour {
 
 	public Camera faceCamera;
 
+	public void ShowNotification(string message, Bounds objectBounds) {
+		// Automatically select the position as the closest point on the bounds to the camera
+		ShowNotification(message, objectBounds.ClosestPoint(faceCamera.transform.position));
+	}
+
 	public void ShowNotification(string message, Vector3 position)
 	{
 		// Display the message
@@ -18,10 +23,16 @@ public class NotificationManager : MonoBehaviour {
 			Text text = clone.GetComponent<Text>();
 			text.text = message;
 
+			// Scale the text based on distance from the camera
+			float dist = Vector3.Distance(faceCamera.transform.position, position);
+
+			// Scale the text based on distance to the camera
+			float scale = dist / 40.0f;
+
+			// Set properties of clone
 			clone.transform.parent = notificationCanvas.transform;
+			clone.transform.localScale *= scale;
 			clone.transform.position = position;
-			//clone.transform.LookAt(faceCamera.transform, new Vector3(0, 1, 0));
-			//clone.transform.Rotate(new Vector3(0, 180, 0));
 			clone.transform.LookAt(position + faceCamera.transform.rotation * Vector3.forward, faceCamera.transform.rotation * Vector3.up);
 		}
 	}

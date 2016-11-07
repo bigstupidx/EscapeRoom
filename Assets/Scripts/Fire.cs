@@ -3,22 +3,29 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Fire : Focusable {
+public class Fire : Searchable {
     public Ice ice;
     public GameObject iceCube;
     public GameObject key;
     private int remaining;
-    public Text message;
-    private GameObject visibleKey;
 	// Use this for initialization
 	void Start () {
         remaining = 5;
-	}
+        message = "Melting in ";
+        key.transform.position = new Vector3(-2.07f, .27f, -8.43f);
+        key.SetActive(false);
+    }
 	
 	// Update is called once per frame
-	void Update () {
-	
-	}
+	void Update ()
+    {
+        if (remaining <= 0)
+        {
+            key.SetActive(true);
+            iceCube.SetActive(false);
+            CancelInvoke("countDown");
+        }
+    }
     public override void OnPointerClick(PointerEventData eventData)
     {
         if (ice.isSelected())
@@ -31,12 +38,13 @@ public class Fire : Focusable {
     public void countDown()
     {
         remaining--;
-        GetComponent<Renderer>().material.color = remaining % 2 == 1 ? Color.magenta : Color.yellow;
-        if (remaining <= 0)
+        // Display the message using the Notification Manager
+        NotificationManager manager = FindObjectOfType<NotificationManager>();
+
+        if (manager != null)
         {
-            CancelInvoke("countDown");
-            visibleKey = key;
-            visibleKey.transform.position = new Vector3(-.350092f, -.24f, 0.1804f);
+            manager.ShowNotification(message + remaining, iceCube.transform.position);
         }
+
     }
 }

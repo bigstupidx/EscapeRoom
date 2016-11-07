@@ -15,12 +15,6 @@ public class Searchable : Focusable
 	{
 		base.OnPointerClick(eventData);
 
-		// Display the message using the Notification Manager
-		NotificationManager manager = FindObjectOfType<NotificationManager>();
-
-		if (manager != null) {
-			manager.ShowNotification(message, gameObject.transform.position);
-		}
-
+		DisplayMessage(message);
 	}
 }

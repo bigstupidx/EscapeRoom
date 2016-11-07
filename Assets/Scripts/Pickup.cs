@@ -2,25 +2,76 @@
 using System.Collections;
 using UnityEngine.EventSystems;
 
-public class Pickup : Searchable {
-    public bool isFound;
-    public Pickup() {
-        message = "You found a";
-    }
-	// Use this for initialization
-	void Start () {
-        isFound = false;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	    
+[RequireComponent(typeof(GoalMover))]
+public class Pickup : Searchable
+{
+    
+	public bool IsFound = false;
+
+	public GameObject InventoryPosition = null;
+
+	public Pickup()
+	{
+		message = "You found ";
 	}
 
-    public override void OnPointerClick(PointerEventData eventData)
-    {
-        base.OnPointerClick(eventData);
-        isFound = true;
-        this.gameObject.SetActive(false);
-    }
+	public override void OnPointerClick(PointerEventData eventData)
+	{
+		base.OnPointerClick(eventData);
+
+		// If already found, do nothing
+		if (IsFound) {
+			return;
+		}
+
+		IsFound = true;
+
+		NotificationManager manager = FindObjectOfType<NotificationManager>();
+
+		Vector3 start = gameObject.transform.position;
+
+		Vector3 cameraPos = manager.faceCamera.transform.position;
+
+		Vector3 cameraGoal = start - cameraPos;
+		cameraGoal.Normalize();
+		cameraGoal *= 1.0f;
+		cameraGoal += cameraPos;
+
+		GoalMover mover = gameObject.GetComponent<GoalMover>();
+		mover.ClearGoals();
+		mover.AddGoal(cameraGoal, gameObject.transform.rotation);
+
+		//Disable selection of the object while it is moving
+		gameObject.layer = 2;
+
+		mover.MovementComplete += Mover_MovementCompleteRenableSelection;
+
+		if (InventoryPosition == null) {
+			// No inventory position, just make the object dissappear after movement finishes
+			mover.MovementComplete += Mover_MovementCompleteVanish;
+		} else {
+			// Change parent of object to inventory position
+			gameObject.transform.parent = InventoryPosition.transform;
+
+			// Move object to final position
+			mover.AddGoal(InventoryPosition.transform.position, InventoryPosition.transform.rotation);
+		}
+	}
+
+	void Mover_MovementCompleteRenableSelection ()
+	{
+		gameObject.layer = 0;
+
+		GoalMover mover = gameObject.GetComponent<GoalMover>();
+		mover.MovementComplete -= Mover_MovementCompleteRenableSelection;
+	}
+
+	void Mover_MovementCompleteVanish ()
+	{
+		// Make the object disappear and then unregister this event
+		gameObject.SetActive(false);
+
+		GoalMover mover = gameObject.GetComponent<GoalMover>();
+		mover.MovementComplete -= Mover_MovementCompleteVanish;
+	}
 }
