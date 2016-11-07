@@ -2,8 +2,9 @@
 using System.Collections;
 using UnityEngine.EventSystems;
 
-namespace TestSearch { 
-    public class TestSearchable : TestBase
+namespace TestSearch
+{
+    public class TestTelevision : TestBase
     {
         public GameObject objection;
         public Functions callOnMethod;
@@ -18,15 +19,16 @@ namespace TestSearch {
         {
             OnPointerClick();
         }
+
         public void OnPointerClick()
         {
             Click(objection);
             search = objection.GetComponent<Searchable>();
-            if (search.message.Equals("Nothing Here."))
+            if (search.message.Equals("You found the key!"))
                 IntegrationTest.Pass(gameObject);
             else
                 IntegrationTest.Fail(gameObject);
- 
+
         }
     }
 }
