@@ -8,13 +8,12 @@ public class Searchable : Focusable
 
 	public Searchable()
 	{
-		message = "";
+		message = "Nothing Here.";
 	}
 
 	public override void OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData)
 	{
 		base.OnPointerClick(eventData);
-        message = "Nothing here.";
 		DisplayMessage(message);
 	}
 }

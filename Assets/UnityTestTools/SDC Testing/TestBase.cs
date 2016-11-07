@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.EventSystems;
 
-public class TestBase {
+public class TestBase : MonoBehaviour {
     public void Click(GameObject target)
     {
         EventSystem eventSystem = Object.FindObjectOfType(typeof(EventSystem)) as EventSystem;
