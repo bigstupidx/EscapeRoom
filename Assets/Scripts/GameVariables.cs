@@ -7,6 +7,6 @@ public static class GameVariables {
     public static float keyDisplayTime;
     public static bool drawerIsOpen;
     public static bool inspectingObject;
-    public static int bigPointerTime = 12;
-    public static int smallPointerTime = 4;
+    public static int bigPointerTime = 4;
+    public static int smallPointerTime = 12;
 }
