@@ -8,7 +8,7 @@ namespace TestSearch
     {
         public GameObject objection;
         public Functions callOnMethod;
-        private Searchable search;
+        private Television search;
         public enum Functions
         {
             Start,
@@ -17,17 +17,20 @@ namespace TestSearch
 
         public void Start()
         {
+            search = objection.GetComponent<Television>();
             OnPointerClick();
         }
 
         public void OnPointerClick()
         {
+            if (search.key.activeSelf)
+                IntegrationTest.Fail("Key was active when it shouldn't have been.");
             Click(objection);
-            search = objection.GetComponent<Searchable>();
-            if (search.message.Equals("You found the key!"))
+            search = objection.GetComponent<Television>();
+            if (search.message.Equals("You found the key!") && search.key.activeSelf )
                 IntegrationTest.Pass(gameObject);
             else
-                IntegrationTest.Fail(gameObject);
+                IntegrationTest.Fail("Key scenario after click didn't work out");
 
         }
     }

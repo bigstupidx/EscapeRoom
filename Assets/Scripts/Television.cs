@@ -8,13 +8,18 @@ public class Television : Searchable
 
 	Television()
 	{
-		message = "You found the key!";
+		message = "";
 	}
+
+    void Start()
+    {
+        key.SetActive(false);
+    }
 
 	public override void OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData)
 	{
 		base.OnPointerClick(eventData);
-
-		key.SetActive(true);
+        message = "You found the key!";
+        key.SetActive(true);
 	}
 }
