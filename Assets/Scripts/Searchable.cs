@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class Searchable : Focusable
 {
 	public string message;
-
 	public Searchable()
 	{
 		message = "";

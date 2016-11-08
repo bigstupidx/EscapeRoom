@@ -8,6 +8,7 @@ namespace TestSearch {
         public GameObject objection;
         public Functions callOnMethod;
         private Searchable search;
+        public Canvas nm;
         public enum Functions
         {
             Start,
@@ -22,6 +23,7 @@ namespace TestSearch {
         {
             Click(objection);
             search = objection.GetComponent<Searchable>();
+            print(nm.GetComponentInChildren<NotificationManager>());
             if (search.message.Equals("Nothing Here."))
                 IntegrationTest.Pass(gameObject);
             else

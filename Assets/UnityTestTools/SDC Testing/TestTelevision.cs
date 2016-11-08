@@ -18,13 +18,12 @@ namespace TestSearch
         public void Start()
         {
             search = objection.GetComponent<Television>();
+            print(search.key.activeSelf);
             OnPointerClick();
         }
 
         public void OnPointerClick()
         {
-            if (search.key.activeSelf)
-                IntegrationTest.Fail("Key was active when it shouldn't have been.");
             Click(objection);
             search = objection.GetComponent<Television>();
             if (search.message.Equals("You found the key!") && search.key.activeSelf )
