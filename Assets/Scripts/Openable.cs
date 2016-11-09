@@ -1,11 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public delegate void ToggleEvent();
+
 public class Openable : Focusable
 {
 	public GoalMover openMover;
 
 	public Transform openTransform;
+
+	public event ToggleEvent Opened;
+
+	public event ToggleEvent Closed;
 
 	private bool _isOpen = false;
 
@@ -37,9 +43,17 @@ public class Openable : Focusable
 			if (IsOpen) {
 				// Move to open position
 				openMover.AddGoal(openTransform.position, openTransform.rotation);
+
+				if (Opened != null) {
+					Opened();
+				}
 			} else {
 				// Move to original (closed) position
 				openMover.AddGoal(closedPosition, closedRotation);
+
+				if (Closed != null) {
+					Closed();
+				}
 			}
 		}
 	}

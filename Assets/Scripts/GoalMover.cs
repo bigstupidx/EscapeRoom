@@ -89,6 +89,9 @@ public class GoalMover : MonoBehaviour
 
 		// Check if we have arrived
 		if (distance < targetRadius) {
+			// Clear out acceleration and velocity
+			velocity = new Vector3(0, 0, 0);
+			acceleration = new Vector3(0, 0, 0);
 			return true;
 		}
 
@@ -134,6 +137,8 @@ public class GoalMover : MonoBehaviour
 
 		if (rotationSize < targetRadius) {
 			// Successfully aligned
+			angularAcceleration = 0;
+			rotationSpeed = 0;
 			return true;
 		}
 
