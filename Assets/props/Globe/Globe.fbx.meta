@@ -17,6 +17,12 @@ ModelImporter:
     100018: transform2
     100020: transform3
     100022: transform4
+    100024: Algeria
+    100026: Greenland
+    100028: India
+    100030: Australia
+    100032: Brazil
+    100034: France
     400000: //RootNode
     400002: globeBottom
     400004: globeStand
@@ -29,20 +35,44 @@ ModelImporter:
     400018: transform2
     400020: transform3
     400022: transform4
+    400024: Algeria
+    400026: Greenland
+    400028: India
+    400030: Australia
+    400032: Brazil
+    400034: France
     2300000: globeBottom
     2300002: globeStand
     2300004: globeTop
     2300006: globeTopFrame
     2300008: //RootNode
+    2300010: Algeria
+    2300012: Greenland
+    2300014: India
+    2300016: Australia
+    2300018: Brazil
+    2300020: France
     3300000: globeBottom
     3300002: globeStand
     3300004: globeTop
     3300006: globeTopFrame
     3300008: //RootNode
+    3300010: Algeria
+    3300012: Greenland
+    3300014: India
+    3300016: Australia
+    3300018: Brazil
+    3300020: France
     4300000: globeStand
     4300002: globeBottom
     4300004: globeTopFrame
     4300006: globeTop
+    4300008: Algeria
+    4300010: Greenland
+    4300012: India
+    4300014: Brazil
+    4300016: Australia
+    4300018: France
     9500000: //RootNode
   materials:
     importMaterials: 1
