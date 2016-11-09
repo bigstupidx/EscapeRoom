@@ -1,15 +1,44 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
-public class TestFocusable : MonoBehaviour {
+namespace TestSearch
+{
+    public class TestFocusable : TestBase
+    {
+        public GameObject objection;
+        public Functions callOnMethod;
+        private Searchable search;
+        public Canvas nm;
+        public enum Functions
+        {
+            Start,
+            OnGazeEnter,
+            OnGazeExit,
+        }
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+        public void Start()
+        {
+            OnPointerEnter();
+            OnPointerExit();
+        }
+        public void OnPointerEnter()
+        {
+            Enter(objection);
+            if (objection.GetComponent<Renderer>().material.shader.name.Equals("Outlined/Diffuse"))
+                IntegrationTest.Pass(gameObject);
+            else
+                IntegrationTest.Fail(gameObject);
+
+        }
+        public void OnPointerExit()
+        {
+            Exit(objection);
+            if (objection.GetComponent<Renderer>().material.shader.name.Equals("Standard"))
+                IntegrationTest.Pass(gameObject);
+            else
+                IntegrationTest.Fail(gameObject);
+
+        }
+    }
 }
