@@ -6,16 +6,6 @@ public class GlobeRotator : Openable {
 	public GoalMover topHalf;
 	public GoalMover bottomHalf;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
 	public override void OnPointerEnter(UnityEngine.EventSystems.PointerEventData eventData)
 	{
 		// Disable if globe is opened
@@ -34,6 +24,8 @@ public class GlobeRotator : Openable {
 		Vector3 newRotation = topHalf.transform.rotation.eulerAngles;
 		newRotation.y += 45;
 
+		topHalf.ClearGoals();
+		bottomHalf.ClearGoals();
 		topHalf.AddGoal(topHalf.transform.position, Quaternion.Euler(newRotation));
 		bottomHalf.AddGoal(bottomHalf.transform.position, Quaternion.Euler(newRotation));
 	}

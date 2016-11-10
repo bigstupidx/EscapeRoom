@@ -26,15 +26,12 @@ public class Pickup : Searchable
 
 		IsFound = true;
 
-		NotificationManager manager = FindObjectOfType<NotificationManager>();
-
 		Vector3 start = gameObject.transform.position;
 
-		Vector3 cameraPos = manager.faceCamera.transform.position;
+		Vector3 cameraPos = Camera.main.transform.position;
 
 		Vector3 cameraGoal = start - cameraPos;
 		cameraGoal.Normalize();
-		cameraGoal *= 1.0f;
 		cameraGoal += cameraPos;
 
 		GoalMover mover = gameObject.GetComponent<GoalMover>();

@@ -8,23 +8,21 @@ public class NotificationManager : MonoBehaviour {
 
 	public Canvas notificationCanvas;
 
-	public Camera faceCamera;
-
 	public void ShowNotification(string message, Bounds objectBounds) {
 		// Automatically select the position as the closest point on the bounds to the camera
-		ShowNotification(message, objectBounds.ClosestPoint(faceCamera.transform.position));
+		ShowNotification(message, objectBounds.ClosestPoint(Camera.main.transform.position));
 	}
 
 	public void ShowNotification(string message, Vector3 position)
 	{
 		// Display the message
-		if (notificationPrefab != null && notificationCanvas != null && faceCamera != null) {
+		if (notificationPrefab != null && notificationCanvas != null && Camera.main != null) {
 			GameObject clone = (GameObject)Instantiate(notificationPrefab);
 			Text text = clone.GetComponent<Text>();
 			text.text = message;
 
 			// Scale the text based on distance from the camera
-			float dist = Vector3.Distance(faceCamera.transform.position, position);
+			float dist = Vector3.Distance(Camera.main.transform.position, position);
 
 			// Scale the text based on distance to the camera
 			float scale = dist / 40.0f;
@@ -33,7 +31,7 @@ public class NotificationManager : MonoBehaviour {
 			clone.transform.parent = notificationCanvas.transform;
 			clone.transform.localScale *= scale;
 			clone.transform.position = position;
-			clone.transform.LookAt(position + faceCamera.transform.rotation * Vector3.forward, faceCamera.transform.rotation * Vector3.up);
+			clone.transform.LookAt(position + Camera.main.transform.rotation * Vector3.forward, Camera.main.transform.rotation * Vector3.up);
 		}
 	}
 }
