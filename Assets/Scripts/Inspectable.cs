@@ -22,6 +22,9 @@ public class Inspectable : Focusable {
 			originalPosition = gameObject.transform.position;
 			originalRotation = gameObject.transform.rotation;
 
+			// Remember the original "right" vector of the camera
+			manager.cameraRight = Camera.main.transform.right;
+
 			// Calculate a position in front of the camera to move the object to
 			Vector3 cameraPos = Camera.main.transform.position;
 			Vector3 cameraGoal = originalPosition - cameraPos;
