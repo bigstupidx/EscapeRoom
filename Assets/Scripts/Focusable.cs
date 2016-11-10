@@ -26,23 +26,31 @@ public class Focusable : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 
 	private Dictionary<Material, Shader> oldShaders = new Dictionary<Material, Shader>();
 
+	private Dictionary<SpriteRenderer, Color> oldColors = new Dictionary<SpriteRenderer, Color>();
+
 	public virtual void OnPointerEnter(PointerEventData eventData)
 	{
 		foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true)) {
-			foreach (Material material in renderer.materials) {
-				float mode = 0.0f;
+			if (renderer is SpriteRenderer) {
+				SpriteRenderer spriteRenderer = (SpriteRenderer)renderer;
+				// Remember the previous color
+				oldColors[spriteRenderer] = spriteRenderer.color;
+				spriteRenderer.color = new Color(1.0f, 0.7f, 0);
+			} else if (renderer is MeshRenderer) {
+				foreach (Material material in renderer.materials) {
+					float mode = 0.0f;
 
-				if (material.HasProperty("_Mode")) {
-					mode = material.GetFloat("_Mode");
-				}
-					
-				if (mode == 0.0f) {
-					// Remember the previous shader
-					if (material.shader.name != "Outlined/Diffuse") {
-						oldShaders[material] = material.shader;
+					if (material.HasProperty("_Mode")) {
+						mode = material.GetFloat("_Mode");
 					}
 
-					material.shader = Shader.Find("Outlined/Diffuse");
+					if (mode == 0.0f) {
+						// Remember the previous shader 
+						if (material.shader.name != "Outlined/Diffuse") {
+							oldShaders[material] = material.shader;
+							material.shader = Shader.Find("Outlined/Diffuse");
+						}
+					}
 				}
 			}
 		}
@@ -51,16 +59,24 @@ public class Focusable : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 	public virtual void OnPointerExit(PointerEventData eventData)
 	{
 		foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true)) {
-			foreach (Material material in renderer.materials) {
-				Shader original = null;
+			if (renderer is SpriteRenderer) {
+				SpriteRenderer spriteRenderer = (SpriteRenderer)renderer;
 
-				oldShaders.TryGetValue(material, out original);
+				// Restore original color
+				Color originalColor;
 
-				if (original == null || original.name == "Sprites/Default") {
-					original = Shader.Find("Standard");
+				if (oldColors.TryGetValue(spriteRenderer, out originalColor)) {
+					spriteRenderer.color = originalColor;
 				}
+			} else if (renderer is MeshRenderer) {
+				foreach (Material material in renderer.materials) {
+					Shader originalShader = null;
 
-				material.shader = original;
+					oldShaders.TryGetValue(material, out originalShader);
+					if (originalShader != null) {
+						material.shader = originalShader;
+					}
+				}
 			}
 		}
 	}
