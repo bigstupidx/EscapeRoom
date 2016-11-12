@@ -17,6 +17,18 @@ public class Inspectable : Focusable {
 
 		// If no object is being inspected, we can begin to inspect this one
 		if (manager.objectBeingInspected == null) {
+			PickUp();
+		} else if (manager.objectBeingInspected == this) {
+			PutDown();
+		}
+	}
+
+	public void PickUp() {
+		InspectionManager manager = FindObjectOfType<InspectionManager>();
+
+		if (manager.objectBeingInspected == null) {
+			// Set object being inspected
+			manager.objectBeingInspected = this;
 
 			// Remember current position and rotation of object
 			originalPosition = gameObject.transform.position;
@@ -51,11 +63,33 @@ public class Inspectable : Focusable {
 			inputModule.SelectionMask.value &= ~1;
 
 			mover.MovementComplete += Mover_PickUpMovementComplete;
+		}
+	}
 
-			// Set object being inspected
-			manager.objectBeingInspected = this;
-		} else if (manager.objectBeingInspected == this) {
-			// Player clicked on object being inspected.  Put it back down
+	void Mover_PickUpMovementComplete ()
+	{
+		// Make the object selectable again - set it to something other than zero since that was disabled
+		gameObject.layer = 3;
+
+		// Make the inspection manager canvas visible
+		InspectionManager manager = FindObjectOfType<InspectionManager>();
+
+		// Show rotation buttons
+		manager.inspectionCanvas.gameObject.SetActive(true);
+
+		// Unregister handler
+		GoalMover mover = gameObject.GetComponent<GoalMover>();
+		mover.MovementComplete -= Mover_PickUpMovementComplete;
+	}
+
+	public void PutDown() {
+		InspectionManager manager = FindObjectOfType<InspectionManager>();
+
+		if (manager.objectBeingInspected == this) {
+			// Clear object being inspected
+			manager.objectBeingInspected = null;
+
+			// Move item back to original position
 			GoalMover mover = gameObject.GetComponent<GoalMover>();
 			mover.ClearGoals();
 			mover.AddGoal(originalPosition, originalRotation);
@@ -77,24 +111,6 @@ public class Inspectable : Focusable {
 			CustomizedGazeInputModule inputModule = FindObjectOfType<CustomizedGazeInputModule>();
 			inputModule.SelectionMask.value |= 1;
 		}
-
-		// Otherwise do nothing
-	}
-
-	void Mover_PickUpMovementComplete ()
-	{
-		// Make the object selectable again - set it to something other than zero since that was disabled
-		gameObject.layer = 3;
-
-		// Make the inspection manager canvas visible
-		InspectionManager manager = FindObjectOfType<InspectionManager>();
-
-		// Show rotation buttons
-		manager.inspectionCanvas.gameObject.SetActive(true);
-
-		// Unregister handler
-		GoalMover mover = gameObject.GetComponent<GoalMover>();
-		mover.MovementComplete -= Mover_PickUpMovementComplete;
 	}
 
 	void Mover_PutDownMovementComplete ()
@@ -109,9 +125,5 @@ public class Inspectable : Focusable {
 		// Unregister handler
 		GoalMover mover = gameObject.GetComponent<GoalMover>();
 		mover.MovementComplete -= Mover_PutDownMovementComplete;
-
-		// Clear object being inspected
-		InspectionManager manager = FindObjectOfType<InspectionManager>();
-		manager.objectBeingInspected = null;
 	}
 }
