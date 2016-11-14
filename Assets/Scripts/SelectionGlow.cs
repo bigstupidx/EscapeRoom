@@ -65,6 +65,8 @@ public class SelectionGlow : PostEffectsBase
 
 		// Render solid color version of glowing objects using the same depth buffer used for the scene
 		RenderTexture glowColor = RenderTexture.GetTemporary(source.width, source.height, 0, source.format);
+		RenderTexture.active = glowColor;
+		GL.Clear(false, true, Color.black);
 
 
 		if (attachedCam == null || tempCam == null) {
@@ -77,7 +79,7 @@ public class SelectionGlow : PostEffectsBase
 		tempCam.CopyFrom(attachedCam);
 		tempCam.SetTargetBuffers(glowColor.colorBuffer, source.depthBuffer);
 		tempCam.backgroundColor = Color.black;
-		tempCam.clearFlags = CameraClearFlags.Color;
+		tempCam.clearFlags = CameraClearFlags.Nothing;
 		tempCam.cullingMask = 1 << 8;
 		tempCam.RenderWithShader(solidColorShader, "");
 

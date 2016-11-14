@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
-using UnityEditor.SceneManagement;
 
-[ExecuteInEditMode]
+
 public class MenuManager : MonoBehaviour
 {
 	/// <summary>

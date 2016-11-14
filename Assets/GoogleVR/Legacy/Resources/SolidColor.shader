@@ -19,7 +19,7 @@ Shader "GoogleVR/SolidColor" {
     SubShader {
         Pass {
             ZWrite Off
-            ZTest LEqual
+            ZTest Always
             Color [_Color]
         }
     }
