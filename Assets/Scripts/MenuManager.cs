@@ -60,8 +60,9 @@ public class MenuManager : MonoBehaviour
 	}
 
 	public void MainMenuButtonPressed()
-	{
-		recordingsPanel.SetActive (false);
+    {
+        SceneManager.LoadScene("MenuScene");
+        recordingsPanel.SetActive (false);
 		settingsPanel.SetActive (false);
 		mainPanel.SetActive (true);
 	}

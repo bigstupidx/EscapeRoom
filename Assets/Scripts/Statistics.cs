@@ -8,7 +8,7 @@ public class Statistics : MonoBehaviour
 {
     public float updateInterval = 0.5F;
     private double lastInterval;
-    private int frames = 0;
+    private static int frames = 0;
     public static float FPS { get; private set; }
     public static float AvgFPS { get; private set; }
 
