@@ -34,4 +34,14 @@ public class Statistics : MonoBehaviour
         AvgFPS = Time.frameCount / Time.time;
 
     }
+
+    public float getAvg()
+    {
+        return AvgFPS;
+    }
+
+    public float getFrames()
+    {
+        return frames;
+    }
 }
