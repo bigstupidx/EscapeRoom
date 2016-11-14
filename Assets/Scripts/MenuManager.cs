@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
-using UnityEditor.SceneManagement;
 
-[ExecuteInEditMode]
+
 public class MenuManager : MonoBehaviour
 {
 	/// <summary>
@@ -61,8 +60,9 @@ public class MenuManager : MonoBehaviour
 	}
 
 	public void MainMenuButtonPressed()
-	{
-		recordingsPanel.SetActive (false);
+    {
+        SceneManager.LoadScene("MenuScene");
+        recordingsPanel.SetActive (false);
 		settingsPanel.SetActive (false);
 		mainPanel.SetActive (true);
 	}

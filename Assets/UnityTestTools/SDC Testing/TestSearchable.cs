@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace TestSearch { 
     public class TestSearchable : TestBase
@@ -23,8 +24,7 @@ namespace TestSearch {
         {
             Click(objection);
             search = objection.GetComponent<Searchable>();
-            print(nm.GetComponentInChildren<NotificationManager>());
-            if (search.message.Equals("Nothing Here."))
+            if (nm.GetComponentInChildren<Text>().text.Equals("Nothing Here."))
                 IntegrationTest.Pass(gameObject);
             else
                 IntegrationTest.Fail(gameObject);
