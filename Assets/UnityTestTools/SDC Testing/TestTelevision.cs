@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace TestSearch
 {
@@ -9,6 +10,7 @@ namespace TestSearch
         public GameObject objection;
         public Functions callOnMethod;
         private Television search;
+        public Canvas nm;
         public enum Functions
         {
             Start,
@@ -18,7 +20,6 @@ namespace TestSearch
         public void Start()
         {
             search = objection.GetComponent<Television>();
-            print(search.key.activeSelf);
             OnPointerClick();
         }
 
@@ -26,7 +27,7 @@ namespace TestSearch
         {
             Click(objection);
             search = objection.GetComponent<Television>();
-            if (search.message.Equals("You found the key!") && search.key.activeSelf )
+            if (nm.GetComponentInChildren<Text>().text.Equals("You found the key!") && search.key.activeSelf )
                 IntegrationTest.Pass(gameObject);
             else
                 IntegrationTest.Fail("Key scenario after click didn't work out");
