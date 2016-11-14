@@ -8,7 +8,10 @@ public class Statistics : MonoBehaviour
 {
     public float updateInterval = 0.5F;
     private double lastInterval;
-    private static int frames = 0;
+    private int frames = 0;
+    private static int TotalFrames = 0;
+    private static float StartTime = 0;
+    private static float FinishTime = 0;
     public static float FPS { get; private set; }
     public static float AvgFPS { get; private set; }
 
@@ -16,6 +19,8 @@ public class Statistics : MonoBehaviour
     {
         lastInterval = Time.realtimeSinceStartup;
         frames = 0;
+        StartTime = Time.realtimeSinceStartup;
+        print(StartTime);
     }
     void OnGUI()
     {
@@ -24,6 +29,7 @@ public class Statistics : MonoBehaviour
     void Update()
     {
         ++frames;
+        ++TotalFrames;
         float timeNow = Time.realtimeSinceStartup;
         if (timeNow > lastInterval + updateInterval) {
             FPS = (float)(frames / (timeNow - lastInterval));
@@ -32,7 +38,7 @@ public class Statistics : MonoBehaviour
         }
 
         AvgFPS = Time.frameCount / Time.time;
-
+        FinishTime = Time.time;
     }
 
     public float getAvg()
@@ -42,6 +48,12 @@ public class Statistics : MonoBehaviour
 
     public float getFrames()
     {
-        return frames;
+        return TotalFrames;
+    }
+
+    public float getTotalTime()
+    {
+        print(Time.realtimeSinceStartup);
+        return Time.realtimeSinceStartup - StartTime;
     }
 }
