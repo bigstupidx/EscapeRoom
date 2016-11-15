@@ -2,7 +2,6 @@
 using UnityStandardAssets.ImageEffects;
 using System.Collections.Generic;
 
-
 [ExecuteInEditMode]
 [RequireComponent(typeof(Camera))]
 [AddComponentMenu("Image Effects/Blur/Blur (Optimized)")]
