@@ -24,34 +24,16 @@ public class Focusable : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 		// Do nothing in base implementation
 	}
 
-	private Dictionary<Material, Shader> oldShaders = new Dictionary<Material, Shader>();
-
-	private Dictionary<SpriteRenderer, Color> oldColors = new Dictionary<SpriteRenderer, Color>();
+	private Dictionary<GameObject, int> oldLayers = new Dictionary<GameObject, int>();
 
 	public virtual void OnPointerEnter(PointerEventData eventData)
 	{
 		foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true)) {
-			if (renderer is SpriteRenderer) {
-				SpriteRenderer spriteRenderer = (SpriteRenderer)renderer;
-				// Remember the previous color
-				oldColors[spriteRenderer] = spriteRenderer.color;
-				spriteRenderer.color = new Color(1.0f, 0.7f, 0);
-			} else if (renderer is MeshRenderer) {
-				foreach (Material material in renderer.materials) {
-					float mode = 0.0f;
+			GameObject go = renderer.gameObject;
 
-					if (material.HasProperty("_Mode")) {
-						mode = material.GetFloat("_Mode");
-					}
-
-					if (mode == 0.0f) {
-						// Remember the previous shader 
-						if (material.shader.name != "Outlined/Diffuse") {
-							oldShaders[material] = material.shader;
-							material.shader = Shader.Find("Outlined/Diffuse");
-						}
-					}
-				}
+			if (go.layer != 8) {
+				oldLayers[go] = go.layer;
+				go.layer = 8;
 			}
 		}
 	}
@@ -59,25 +41,12 @@ public class Focusable : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 	public virtual void OnPointerExit(PointerEventData eventData)
 	{
 		foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true)) {
-			if (renderer is SpriteRenderer) {
-				SpriteRenderer spriteRenderer = (SpriteRenderer)renderer;
+			GameObject go = renderer.gameObject;
 
-				// Restore original color
-				Color originalColor;
+			int oldLayer = 0;
 
-				if (oldColors.TryGetValue(spriteRenderer, out originalColor)) {
-					spriteRenderer.color = originalColor;
-				}
-			} else if (renderer is MeshRenderer) {
-				foreach (Material material in renderer.materials) {
-					Shader originalShader = null;
-
-					oldShaders.TryGetValue(material, out originalShader);
-					if (originalShader != null) {
-						material.shader = originalShader;
-					}
-				}
-			}
+			oldLayers.TryGetValue(go, out oldLayer);
+			go.layer = oldLayer;
 		}
 	}
 
