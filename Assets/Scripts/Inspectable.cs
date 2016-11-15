@@ -55,12 +55,10 @@ public class Inspectable : Focusable {
 			mover.ClearGoals();
 			mover.AddGoal(cameraGoal, gameObject.transform.rotation);
 
-			//Disable selection of the object while it is moving
-			gameObject.layer = 2;
-
 			// Disable selection of all other objects in the scene
 			CustomizedGazeInputModule inputModule = FindObjectOfType<CustomizedGazeInputModule>();
 			inputModule.SelectionMask.value &= ~1;
+			inputModule.SelectionMask.value &= ~(1 << 8);
 
 			mover.MovementComplete += Mover_PickUpMovementComplete;
 		}
@@ -68,9 +66,6 @@ public class Inspectable : Focusable {
 
 	void Mover_PickUpMovementComplete ()
 	{
-		// Make the object selectable again - set it to something other than zero since that was disabled
-		gameObject.layer = 3;
-
 		// Make the inspection manager canvas visible
 		InspectionManager manager = FindObjectOfType<InspectionManager>();
 
@@ -97,31 +92,18 @@ public class Inspectable : Focusable {
 			// Remove rotation buttons
 			manager.inspectionCanvas.gameObject.SetActive(false);
 
-			//Disable selection of the object and its children while it is moving
-			gameObject.layer = 2;
-
-			foreach (Transform t in gameObject.GetComponentInChildren<Transform>()) {
-				t.gameObject.layer = 2;
-			}
-
 			mover.MovementComplete += Mover_PutDownMovementComplete;
 
 			// Re-enable selection of all other objects in the scene
 			// Disable selection of all other objects in the scene
 			CustomizedGazeInputModule inputModule = FindObjectOfType<CustomizedGazeInputModule>();
 			inputModule.SelectionMask.value |= 1;
+			inputModule.SelectionMask.value |= 1 << 8;
 		}
 	}
 
 	void Mover_PutDownMovementComplete ()
 	{
-		// Make the object and its children selectable again
-		gameObject.layer = 0;
-
-		foreach (Transform t in gameObject.GetComponentInChildren<Transform>()) {
-			t.gameObject.layer = 0;
-		}
-
 		// Unregister handler
 		GoalMover mover = gameObject.GetComponent<GoalMover>();
 		mover.MovementComplete -= Mover_PutDownMovementComplete;
