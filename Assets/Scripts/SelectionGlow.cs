@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityStandardAssets.ImageEffects;
+using System.Collections.Generic;
 
 
 [ExecuteInEditMode]
@@ -38,6 +39,24 @@ public class SelectionGlow : PostEffectsBase
 	private Material blurMaterial = null;
 	private Material addBrightStuffBlendOneOneMaterial = null;
 
+	public static void AddGlowingObject(GameObject go) {
+		glowingObjects.Add(new GlowingObjectInfo() {
+			gameObject = go,
+			originalLayer = go.layer
+		});
+	}
+
+	public static void ClearGlowingObjects() {
+		glowingObjects.Clear();
+	}
+
+	private class GlowingObjectInfo {
+		public GameObject gameObject;
+		public int originalLayer;
+	}
+		
+	private static List<GlowingObjectInfo> glowingObjects = new List<GlowingObjectInfo>();
+
 	public override bool CheckResources()
 	{
 		CheckSupport(false);
@@ -75,6 +94,12 @@ public class SelectionGlow : PostEffectsBase
 			tempCam = tempCampObj.GetComponent<Camera>();
 			tempCam.enabled = false;
 		}
+
+		// Temporarily move all glowing objects to layer 8
+		foreach (GlowingObjectInfo goi in glowingObjects) {
+			goi.originalLayer = goi.gameObject.layer;
+			goi.gameObject.layer = 8;
+		}
 			
 		tempCam.CopyFrom(attachedCam);
 		tempCam.SetTargetBuffers(glowColor.colorBuffer, source.depthBuffer);
@@ -82,6 +107,12 @@ public class SelectionGlow : PostEffectsBase
 		tempCam.clearFlags = CameraClearFlags.Nothing;
 		tempCam.cullingMask = 1 << 8;
 		tempCam.RenderWithShader(solidColorShader, "");
+
+		// Restore original layer values
+		// Temporarily move all glowing objects to layer 8
+		foreach (GlowingObjectInfo goi in glowingObjects) {
+			goi.gameObject.layer = goi.originalLayer;
+		}
 
 		//Graphics.Blit(glowColor, destination);
 

@@ -24,30 +24,18 @@ public class Focusable : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 		// Do nothing in base implementation
 	}
 
-	private Dictionary<GameObject, int> oldLayers = new Dictionary<GameObject, int>();
-
 	public virtual void OnPointerEnter(PointerEventData eventData)
 	{
-		foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true)) {
-			GameObject go = renderer.gameObject;
+		SelectionGlow.ClearGlowingObjects();
 
-			if (go.layer != 8) {
-				oldLayers[go] = go.layer;
-				go.layer = 8;
-			}
+		foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true)) {
+			SelectionGlow.AddGlowingObject(renderer.gameObject);
 		}
 	}
 
 	public virtual void OnPointerExit(PointerEventData eventData)
 	{
-		foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true)) {
-			GameObject go = renderer.gameObject;
-
-			int oldLayer = 0;
-
-			oldLayers.TryGetValue(go, out oldLayer);
-			go.layer = oldLayer;
-		}
+		SelectionGlow.ClearGlowingObjects();
 	}
 
 	protected void DisplayMessage(string text)
