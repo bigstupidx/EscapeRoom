@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class Safe : Searchable
 {
 	public GameObject keyPad;
+	public GoalMover safeLid;
 
 	Safe()
 	{
@@ -21,5 +22,7 @@ public class Safe : Searchable
 		base.OnPointerClick(eventData);
         message = "You found a safe!";
 		keyPad.SetActive(true);
+		safeLid.ClearGoals ();
+
 	}
 }

@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class KeyPadButton : MonoBehaviour
+public class KeyPadButton : Searchable
 {
 	public string buttonPressed;
 
@@ -16,8 +16,19 @@ public class KeyPadButton : MonoBehaviour
         
     }
 
-	public void workNowKThxBye() {
-		UnlockSafe.codeEntry += buttonPressed;
+	public override void OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData)
+	{
+		if(buttonPressed.Equals("del"))
+		{
+			UnlockSafe.codeEntry = "";
+			message = "";
+		}
+		else
+		{
+			UnlockSafe.codeEntry += buttonPressed;
+			message = UnlockSafe.codeEntry;
+		}
+		DisplayMessage (message);
 	}
 
 }
