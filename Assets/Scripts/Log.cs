@@ -24,5 +24,10 @@ public class Log : Searchable {
                 ps.Play();
             }
         }
+        else
+        {
+            message = "That fire looks a little too hot to touch";
+            base.OnPointerClick(eventData);
+        }
     }
 }
