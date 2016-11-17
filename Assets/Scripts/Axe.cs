@@ -10,6 +10,7 @@ public class Axe : Pickup {
         if (!IsFound)
         {
             base.OnPointerClick(eventData);
+            gameObject.layer = 2;
         }
     }
 

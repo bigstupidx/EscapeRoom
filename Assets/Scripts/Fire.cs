@@ -12,7 +12,7 @@ public class Fire : Searchable {
 	void Start () {
         remaining = 5;
         message = "Melting in ";
-        key.transform.position = new Vector3(-2.07f, .27f, -8.43f);
+        key.transform.position = new Vector3(-6.382f, .22f, -3.638f);
         key.SetActive(false);
     }
 	
@@ -30,7 +30,7 @@ public class Fire : Searchable {
     {
         if (ice.isSelected())
         {
-            iceCube.transform.position = new Vector3(-.01f, 2.146f, -8.8795f);
+            iceCube.transform.position = new Vector3(-3.64f, .79f, -4.11f);
             InvokeRepeating("countDown", 1, 1);
         }
     }
@@ -40,10 +40,11 @@ public class Fire : Searchable {
         remaining--;
         // Display the message using the Notification Manager
         NotificationManager manager = FindObjectOfType<NotificationManager>();
-
+        message = "Melting, please wait!";
         if (manager != null)
         {
-            manager.ShowNotification(message + remaining, iceCube.transform.position);
+            if(!manager.GetComponentInChildren<Text>())
+                manager.ShowNotification(message, iceCube.transform.position);
         }
 
     }
