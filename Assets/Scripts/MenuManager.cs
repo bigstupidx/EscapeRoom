@@ -30,7 +30,7 @@ public class MenuManager : MonoBehaviour
 		SceneManager.sceneLoaded += SceneManager_sceneLoadedGameplay;
 
 		// Load the game scene
-		SceneManager.LoadScene("CSC495Demo");
+		SceneManager.LoadScene("FinalScene");
 	}
 
 	void SceneManager_sceneLoadedGameplay (Scene arg0, LoadSceneMode arg1)
