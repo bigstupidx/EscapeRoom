@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 
 public class Log : Searchable {
     public GameObject campfire;
+    public GameObject matchbox;
     public Log()
     {
         message = "The log lights on fire!";
@@ -17,11 +18,18 @@ public class Log : Searchable {
     {
         if (!campfire.activeSelf)
         {
-            base.OnPointerClick(eventData);
-            campfire.SetActive(true);
-            foreach (ParticleSystem ps in campfire.GetComponentsInChildren<ParticleSystem>())
+            if (matchbox.GetComponent<Pickup>().IsFound) {
+                base.OnPointerClick(eventData);
+                campfire.SetActive(true);
+                foreach (ParticleSystem ps in campfire.GetComponentsInChildren<ParticleSystem>())
+                {
+                    ps.Play();
+                }
+            }
+            else
             {
-                ps.Play();
+                message = "How did this come from a chair???";
+                base.OnPointerClick(eventData);
             }
         }
         else
