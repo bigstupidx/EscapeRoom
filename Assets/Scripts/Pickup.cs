@@ -30,14 +30,15 @@ public class Pickup : Searchable
 
 		Vector3 cameraPos = Camera.main.transform.position;
 
-		Vector3 cameraGoal = Util.GetPointBetweenPositionAndCamera(start);			
+		Vector3 cameraGoal = Util.GetPointBetweenPositionAndCamera(start, 1.0f);			
 
 		GoalMover mover = gameObject.GetComponent<GoalMover>();
 		mover.ClearGoals();
 		mover.AddGoal(cameraGoal, gameObject.transform.rotation);
 
-		//Disable selection of the object while it is moving
-		gameObject.layer = 2;
+		//Disable selection of all objects while this one is moving
+		CustomizedGazeInputModule inputModule = FindObjectOfType<CustomizedGazeInputModule>();
+		inputModule.DisableSelectionLayer(Layers.Default);
 
 		mover.MovementComplete += Mover_MovementCompleteRenableSelection;
 
@@ -55,7 +56,9 @@ public class Pickup : Searchable
 
 	void Mover_MovementCompleteRenableSelection ()
 	{
-		gameObject.layer = 0;
+		//Re-enable selection of objects
+		CustomizedGazeInputModule inputModule = FindObjectOfType<CustomizedGazeInputModule>();
+		inputModule.EnableSelectionLayer(Layers.Default);
 
 		GoalMover mover = gameObject.GetComponent<GoalMover>();
 		mover.MovementComplete -= Mover_MovementCompleteRenableSelection;
@@ -63,6 +66,10 @@ public class Pickup : Searchable
 
 	void Mover_MovementCompleteVanish ()
 	{
+		//Re-enable selection of objects
+		CustomizedGazeInputModule inputModule = FindObjectOfType<CustomizedGazeInputModule>();
+		inputModule.EnableSelectionLayer(Layers.Default);
+
 		// Make the object disappear and then unregister this event
 		gameObject.SetActive(false);
 

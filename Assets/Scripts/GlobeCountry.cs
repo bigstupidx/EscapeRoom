@@ -27,7 +27,7 @@ public class GlobeCountry : Focusable {
 		clickHistory[2] = this.name;
 
 		// Check victory condition - countries were clicked in the correct order
-		if (clickHistory[0] == "Algeria" && clickHistory[1] == "India" && clickHistory[2] == "Greenland") {
+		if (clickHistory[0] == "Algeria" && clickHistory[1] == "Greenland" && clickHistory[2] == "India") {
 			// Open the globe
 			DisplayMessage(String.Format("As you press on {0}, you hear a click.", this.name));
 

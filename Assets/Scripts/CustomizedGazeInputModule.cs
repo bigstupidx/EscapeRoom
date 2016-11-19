@@ -53,5 +53,13 @@ public class CustomizedGazeInputModule : GazeInputModule
 		pointerData.delta = headPose - lastHeadPose;
 		lastHeadPose = headPose;
 	}
+
+	public void DisableSelectionLayer(Layers layer) {
+		SelectionMask.value &= ~(1 << (int)layer);
+	}
+
+	public void EnableSelectionLayer(Layers layer) {
+		SelectionMask.value |= (1 << (int)layer);
+	}
 }
 

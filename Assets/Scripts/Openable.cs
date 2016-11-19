@@ -37,8 +37,9 @@ public class Openable : Focusable
 			// Subscribe to complection notification
 			openMover.MovementComplete += OpenMover_MovementComplete;
 
-			// Disable selection during animation
-			gameObject.layer = 2;
+			//Disable selection during animation
+			CustomizedGazeInputModule inputModule = FindObjectOfType<CustomizedGazeInputModule>();
+			inputModule.DisableSelectionLayer(Layers.Default);
 
 			if (IsOpen) {
 				// Move to open position
@@ -60,8 +61,9 @@ public class Openable : Focusable
 
 	void OpenMover_MovementComplete ()
 	{
-		// Re-enable selection
-		gameObject.layer = originalLayer;
+		//Re-enable selection of objects
+		CustomizedGazeInputModule inputModule = FindObjectOfType<CustomizedGazeInputModule>();
+		inputModule.EnableSelectionLayer(Layers.Default);
 
 		// Unsubscribe
 		openMover.MovementComplete -= OpenMover_MovementComplete;

@@ -7,8 +7,6 @@ public class Inspectable : Focusable {
 	private Vector3 originalPosition;
 	private Quaternion originalRotation;
 
-	public float cameraDistance = 1.5f;
-
 	public override void OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData)
 	{
 		base.OnPointerClick(eventData);
@@ -39,7 +37,7 @@ public class Inspectable : Focusable {
 
 			// Calculate a position in front of the camera to move the object to
 			Vector3 cameraPos = Camera.main.transform.position;
-			Vector3 cameraGoal = Util.GetPointBetweenPositionAndCamera(originalPosition, cameraDistance);
+			Vector3 cameraGoal = Util.GetPointBetweenPositionAndCamera(originalPosition);
 
 			// Move the (invisible) inspection menu canvas to the camera position
 			manager.inspectionCanvas.transform.position = cameraGoal;
@@ -53,16 +51,15 @@ public class Inspectable : Focusable {
 			mover.AddGoal(cameraGoal, gameObject.transform.rotation);
 
 			// Disable selection of object and its children while they are moving
-			gameObject.layer = 2;
+			gameObject.layer = (int)Layers.IgnoreRaycast;
 
 			foreach (Transform t in gameObject.GetComponentsInChildren<Transform>()) {
-				t.gameObject.layer = 2;
+				t.gameObject.layer = (int)Layers.IgnoreRaycast;
 			}
 
 			// Disable selection of all other objects in the scene
 			CustomizedGazeInputModule inputModule = FindObjectOfType<CustomizedGazeInputModule>();
-			inputModule.SelectionMask.value &= ~1;
-			inputModule.SelectionMask.value &= ~(1 << 8);
+			inputModule.DisableSelectionLayer(Layers.Default);
 
 			mover.MovementComplete += Mover_PickUpMovementComplete;
 		}
@@ -71,10 +68,10 @@ public class Inspectable : Focusable {
 	void Mover_PickUpMovementComplete ()
 	{
 		// enable selection of object and its children after they are done moving
-		gameObject.layer = 3;
+		gameObject.layer = (int)Layers.InspectedObject;
 
 		foreach (Transform t in gameObject.GetComponentsInChildren<Transform>()) {
-			t.gameObject.layer = 3;
+			t.gameObject.layer = (int)Layers.InspectedObject;
 		}
 
 		// Make the inspection manager canvas visible
@@ -115,18 +112,17 @@ public class Inspectable : Focusable {
 			// Re-enable selection of all other objects in the scene
 			// Disable selection of all other objects in the scene
 			CustomizedGazeInputModule inputModule = FindObjectOfType<CustomizedGazeInputModule>();
-			inputModule.SelectionMask.value |= 1;
-			inputModule.SelectionMask.value |= 1 << 8;
+			inputModule.EnableSelectionLayer(Layers.Default);
 		}
 	}
 
 	void Mover_PutDownMovementComplete ()
 	{
 		// Make object and its children selectable again
-		gameObject.layer = 0;
+		gameObject.layer = (int)Layers.Default;
 
 		foreach (Transform t in gameObject.GetComponentsInChildren<Transform>()) {
-			t.gameObject.layer = 0;
+			t.gameObject.layer = (int)Layers.Default;
 		}
 
 		// Unregister handler
