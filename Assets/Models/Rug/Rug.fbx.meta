@@ -75,7 +75,7 @@ ModelImporter:
       name: CurlUp
       takeName: Take 001
       firstFrame: 1
-      lastFrame: 45
+      lastFrame: 60
       wrapMode: 8
       orientationOffsetY: 0
       level: 0
