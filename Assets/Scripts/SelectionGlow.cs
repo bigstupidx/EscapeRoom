@@ -107,14 +107,6 @@ public class SelectionGlow : PostEffectsBase
 		tempCam.cullingMask = 1 << 8;
 		tempCam.RenderWithShader(solidColorShader, "");
 
-		// Restore original layer values
-		// Temporarily move all glowing objects to layer 8
-		foreach (GlowingObjectInfo goi in glowingObjects) {
-			goi.gameObject.layer = goi.originalLayer;
-		}
-
-		//Graphics.Blit(glowColor, destination);
-
 		float widthMod = 1.0f / (1.0f * (1 << downsample));
 	
 		blurMaterial.SetVector("_Parameter", new Vector4(blurSize * widthMod, -blurSize * widthMod, 0.0f, 0.0f));
@@ -152,9 +144,18 @@ public class SelectionGlow : PostEffectsBase
 
 		addBrightStuffBlendOneOneMaterial.SetFloat("_Intensity", intensity);
 
+		Graphics.Blit(rt, source, addBrightStuffBlendOneOneMaterial);
+
+		tempCam.SetTargetBuffers(source.colorBuffer, source.depthBuffer);
+		tempCam.Render();
+
 		Graphics.Blit(source, destination);
 
-		Graphics.Blit(rt, destination, addBrightStuffBlendOneOneMaterial);
+		// Restore original layer values
+		// Temporarily move all glowing objects to layer 8
+		foreach (GlowingObjectInfo goi in glowingObjects) {
+			goi.gameObject.layer = goi.originalLayer;
+		}
 
 		RenderTexture.ReleaseTemporary(rt);
 		RenderTexture.ReleaseTemporary(glowColor);

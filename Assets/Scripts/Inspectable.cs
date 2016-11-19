@@ -73,11 +73,11 @@ public class Inspectable : Focusable {
 
 	void Mover_PickUpMovementComplete ()
 	{
-		// enable selection of object and its children while they are moving
-		gameObject.layer = 5;
+		// enable selection of object and its children after they are done moving
+		gameObject.layer = 3;
 
 		foreach (Transform t in gameObject.GetComponentsInChildren<Transform>()) {
-			t.gameObject.layer = 5;
+			t.gameObject.layer = 3;
 		}
 
 		// Make the inspection manager canvas visible
