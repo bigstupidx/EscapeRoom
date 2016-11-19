@@ -24,15 +24,13 @@ public class NotificationManager : MonoBehaviour {
 			// Place the text 1 meter from the camera in the direction of the object being clicked
 			Vector3 cameraPos = Camera.main.transform.position;
 
-			Vector3 cameraGoal = position - cameraPos;
-			cameraGoal.Normalize();
-			cameraGoal += cameraPos;
+			Vector3 cameraGoal = Util.GetPointBetweenPositionAndCamera(position);
 
 			// Set properties of clone
 			clone.transform.parent = notificationCanvas.transform;
-			//clone.transform.localScale *= scale;
+			Util.RotateToFaceCamera(clone.transform);
 			clone.transform.position = cameraGoal;
-			clone.transform.LookAt(position + Camera.main.transform.rotation * Vector3.forward, Camera.main.transform.rotation * Vector3.up);
+			Util.RotateToFaceCamera(clone.transform);
 		}
 	}
 }

@@ -30,9 +30,7 @@ public class Pickup : Searchable
 
 		Vector3 cameraPos = Camera.main.transform.position;
 
-		Vector3 cameraGoal = start - cameraPos;
-		cameraGoal.Normalize();
-		cameraGoal += cameraPos;
+		Vector3 cameraGoal = Util.GetPointBetweenPositionAndCamera(start);			
 
 		GoalMover mover = gameObject.GetComponent<GoalMover>();
 		mover.ClearGoals();

@@ -55,4 +55,8 @@ public class Focusable : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 			manager.ShowNotification(text, collider.bounds);
 		}
 	}
+
+	public void RotateToFaceCamera() {
+		Util.RotateToFaceCamera(transform);
+	}
 }

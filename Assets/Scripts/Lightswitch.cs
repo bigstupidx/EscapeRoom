@@ -1,25 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Lightswitch : Openable {
-	public Light light1;
-	public Light light2;
+	public Light[] onLights;
+	public Light[] offLights;
+
 
 	public Projector mapProjector;
 
 	public Desklamp deskLamp;
 
-	public Color offColor;
-
-	private Color originalLight1Color;
-	private Color originalLight2Color;
-
 	public override void Start()
 	{
 		base.Start();
 
-		originalLight1Color = light1.color;
-		originalLight2Color = light2.color;
+		foreach (Light light in offLights) {
+			light.enabled = false;
+		}
+
+		foreach (Light light in onLights) {
+			light.enabled = true;
+		}
 
 		Opened += Lightswitch_Opened;
 		Closed += Lightswitch_Closed;
@@ -27,8 +29,13 @@ public class Lightswitch : Openable {
 
 	void Lightswitch_Opened ()
 	{
-		light1.color = offColor;
-		light2.color = offColor;
+		foreach (Light light in offLights) {
+			light.enabled = true;
+		}
+
+		foreach (Light light in onLights) {
+			light.enabled = false;
+		}
 
 		if (deskLamp.isOn) {
 			mapProjector.material.color = Color.white;
@@ -37,8 +44,13 @@ public class Lightswitch : Openable {
 
 	void Lightswitch_Closed ()
 	{
-		light1.color = originalLight1Color;
-		light2.color = originalLight2Color;
+		foreach (Light light in offLights) {
+			light.enabled = false;
+		}
+
+		foreach (Light light in onLights) {
+			light.enabled = true;
+		}
 
 		mapProjector.material.color = deskLamp.projectorLightOnColor;
 	}

@@ -7,7 +7,7 @@ public class Inspectable : Focusable {
 	private Vector3 originalPosition;
 	private Quaternion originalRotation;
 
-	public float cameraDistance = 1.0f;
+	public float cameraDistance = 1.5f;
 
 	public override void OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData)
 	{
@@ -39,16 +39,13 @@ public class Inspectable : Focusable {
 
 			// Calculate a position in front of the camera to move the object to
 			Vector3 cameraPos = Camera.main.transform.position;
-			Vector3 cameraGoal = originalPosition - cameraPos;
-			cameraGoal.Normalize();
-			cameraGoal *= cameraDistance;
-			cameraGoal += cameraPos;
+			Vector3 cameraGoal = Util.GetPointBetweenPositionAndCamera(originalPosition, cameraDistance);
 
 			// Move the (invisible) inspection menu canvas to the camera position
 			manager.inspectionCanvas.transform.position = cameraGoal;
 
 			// Rotate it to face the camera
-			manager.inspectionCanvas.transform.LookAt(cameraGoal + Camera.main.transform.rotation * Vector3.forward, Camera.main.transform.rotation * Vector3.up);
+			Util.RotateToFaceCamera(manager.inspectionCanvas.transform);
 
 			// Move the object to camera goal position
 			GoalMover mover = gameObject.GetComponent<GoalMover>();
