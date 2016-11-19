@@ -7,6 +7,8 @@ public class UnlockSafe : MonoBehaviour {
 	public string combination;
 	public GoalMover safeTop;
 	public GameObject openSafeTop;
+	public GameObject keyPad;
+	public Searchable safe;
 
 	// Use this for initialization
 	void Start () {
@@ -20,6 +22,8 @@ public class UnlockSafe : MonoBehaviour {
 			Quaternion rot = openSafeTop.transform.rotation;
 		
 			safeTop.AddGoal (pos, rot, null);
+			keyPad.SetActive (false);
+			safe.message = "Safe Unlocked!";
 		}
 	}
 }
