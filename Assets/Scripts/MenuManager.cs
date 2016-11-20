@@ -14,11 +14,21 @@ public class MenuManager : MonoBehaviour
 	public GameObject settingsPanel;
 	public GameObject mainPanel;
 	public GameObject recordingsPanel;
+    public GameObject savesPanel;
 
 	void Start()
 	{
 		recordingsPanel.SetActive (false);
 		settingsPanel.SetActive (false);
+        savesPanel.SetActive (false);
+
+        if (FinalDoor.WinGame == true)
+        {
+            savesPanel.SetActive(true);
+            mainPanel.SetActive(false);
+        }
+        FinalDoor.WinGame = false;
+        
 	}
 
 	public void PlayButtonPressed()
@@ -67,6 +77,7 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("MenuScene");
         recordingsPanel.SetActive (false);
 		settingsPanel.SetActive (false);
+        savesPanel.SetActive(false);
 		mainPanel.SetActive (true);
 	}
 
@@ -132,6 +143,6 @@ public class MenuManager : MonoBehaviour
 		RecordingManager.PlaybackComplete -= RecordingManager_PlaybackComplete;
 
 		// Return to main menu
-		SceneManager.LoadScene("WinScene");
+		SceneManager.LoadScene("MenuScene");
 	}
 }
