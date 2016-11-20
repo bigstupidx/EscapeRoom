@@ -70,6 +70,8 @@ public class SelectionGlow : PostEffectsBase
 
 	public void OnDisable()
 	{
+		ClearGlowingObjects();
+
 		if (blurMaterial)
 			DestroyImmediate(blurMaterial);
 	}
@@ -96,8 +98,10 @@ public class SelectionGlow : PostEffectsBase
 
 		// Temporarily move all glowing objects to layer 8
 		foreach (GlowingObjectInfo goi in glowingObjects) {
-			goi.originalLayer = goi.gameObject.layer;
-			goi.gameObject.layer = 8;
+			if (goi != null) {
+				goi.originalLayer = goi.gameObject.layer;
+				goi.gameObject.layer = 8;
+			}
 		}
 			
 		tempCam.CopyFrom(attachedCam);

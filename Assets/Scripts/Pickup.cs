@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(GoalMover))]
 public class Pickup : Searchable
 {
-    
 	public bool IsFound = false;
 
 	public GameObject InventoryPosition = null;
@@ -14,6 +13,8 @@ public class Pickup : Searchable
 	{
 		message = "You found ";
 	}
+
+	private int previousLayer;
 
 	public override void OnPointerClick(PointerEventData eventData)
 	{
@@ -36,9 +37,9 @@ public class Pickup : Searchable
 		mover.ClearGoals();
 		mover.AddGoal(cameraGoal, gameObject.transform.rotation);
 
-		//Disable selection of all objects while this one is moving
-		CustomizedGazeInputModule inputModule = FindObjectOfType<CustomizedGazeInputModule>();
-		inputModule.DisableSelectionLayer(Layers.Default);
+		//Disable selection of objects while it is moving
+		previousLayer = gameObject.layer;
+		gameObject.layer = (int)Layers.IgnoreRaycast;
 
 		mover.MovementComplete += Mover_MovementCompleteRenableSelection;
 
@@ -56,9 +57,8 @@ public class Pickup : Searchable
 
 	void Mover_MovementCompleteRenableSelection ()
 	{
-		//Re-enable selection of objects
-		CustomizedGazeInputModule inputModule = FindObjectOfType<CustomizedGazeInputModule>();
-		inputModule.EnableSelectionLayer(Layers.Default);
+		//Re-enable selection of the object
+		gameObject.layer = previousLayer;
 
 		GoalMover mover = gameObject.GetComponent<GoalMover>();
 		mover.MovementComplete -= Mover_MovementCompleteRenableSelection;
@@ -66,10 +66,6 @@ public class Pickup : Searchable
 
 	void Mover_MovementCompleteVanish ()
 	{
-		//Re-enable selection of objects
-		CustomizedGazeInputModule inputModule = FindObjectOfType<CustomizedGazeInputModule>();
-		inputModule.EnableSelectionLayer(Layers.Default);
-
 		// Make the object disappear and then unregister this event
 		gameObject.SetActive(false);
 

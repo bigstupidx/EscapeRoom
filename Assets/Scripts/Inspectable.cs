@@ -37,7 +37,7 @@ public class Inspectable : Focusable {
 
 			// Calculate a position in front of the camera to move the object to
 			Vector3 cameraPos = Camera.main.transform.position;
-			Vector3 cameraGoal = Util.GetPointBetweenPositionAndCamera(originalPosition);
+			Vector3 cameraGoal = Util.GetPointBetweenPositionAndCamera(originalPosition, 1.0f);
 
 			// Move the (invisible) inspection menu canvas to the camera position
 			manager.inspectionCanvas.transform.position = cameraGoal;

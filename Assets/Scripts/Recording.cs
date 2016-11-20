@@ -27,7 +27,7 @@ public class Recording
 
 	/// <summary>
 	/// Saves the timeline data of this recording to a file.  The file will be loacated in Application.persistentDataPath which, on my Windows machine, is:
-	/// C:\Users\{Your User Name}\AppData\LocalLow\DefaultCompany\VR Test 2
+	/// C:\Users\{Your User Name}\AppData\LocalLow\Umair\PPackTest
 	/// </summary>
 	/// <param name="fileName">The name of the file to save to</param>
 	public void Save(string fileName)

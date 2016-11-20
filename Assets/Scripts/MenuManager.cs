@@ -87,7 +87,7 @@ public class MenuManager : MonoBehaviour
 		RecordingManager.PlaybackComplete += RecordingManager_PlaybackComplete;
 
 		// Load the game scene
-		SceneManager.LoadScene("CSC495Demo");
+		SceneManager.LoadScene("FinalScene");
 	}
 
 	void SceneManager_sceneLoadedPlaybackRecording (Scene arg0, LoadSceneMode arg1)
