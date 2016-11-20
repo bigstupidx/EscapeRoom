@@ -23,7 +23,7 @@ public class FinalDoor : Lockable {
             RecordingManager.StopRecording();
 
             //Calculate WinScene stats
-            Statistics.Stop();
+            Statistics.StopTiming();
 
             // Save the recording into the static variable of the MenuManager
             MenuManager.SavedRecording = RecordingManager.GetRecordingFromActiveScene();

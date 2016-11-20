@@ -38,6 +38,9 @@ public class MenuManager : MonoBehaviour
 		// Start recording the game scene
 		RecordingManager.StartRecording();
 
+		// Start Staticiscs Timing
+		Statistics.StartTiming();
+
 		// Unsubscribe from notification
 		SceneManager.sceneLoaded -= SceneManager_sceneLoadedGameplay;
 	}
