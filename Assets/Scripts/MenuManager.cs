@@ -129,6 +129,6 @@ public class MenuManager : MonoBehaviour
 		RecordingManager.PlaybackComplete -= RecordingManager_PlaybackComplete;
 
 		// Return to main menu
-		SceneManager.LoadScene("MenuScene");
+		SceneManager.LoadScene("WinScene");
 	}
 }
