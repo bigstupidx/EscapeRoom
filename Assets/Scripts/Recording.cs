@@ -53,6 +53,20 @@ public class Recording
 		}
 	}
 
+	/// <summary>
+	/// Loads the recording stored in the specified TextAsset
+	/// Note that this is static so "Recording.Load" can be called instead of using a constructor to create a Recording
+	/// from a file.
+	/// </summary>
+	/// <param name="fileName">The name of the saved file load from</param>
+	public static Recording Load(TextAsset asset)
+	{
+		var serializer = new XmlSerializer(typeof(Recording));
+		using (TextReader reader = new StringReader(asset.text)) {
+			return serializer.Deserialize(reader) as Recording;
+		}
+	}
+
 	public abstract class Key
 	{
 		// The time the key occured, relative to the start of the recording in seconds

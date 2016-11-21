@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 public class MenuManager : MonoBehaviour
@@ -14,20 +15,21 @@ public class MenuManager : MonoBehaviour
 	public GameObject settingsPanel;
 	public GameObject mainPanel;
 	public GameObject recordingsPanel;
-    public GameObject savesPanel;
+	public GameObject savesPanel;
+
+	public TextAsset demoRecording;
 
 	void Start()
 	{
-		recordingsPanel.SetActive (false);
-		settingsPanel.SetActive (false);
-        savesPanel.SetActive (false);
+		recordingsPanel.SetActive(false);
+		settingsPanel.SetActive(false);
+		savesPanel.SetActive(false);
 
-        if (FinalDoor.WinGame == true)
-        {
-            savesPanel.SetActive(true);
-            mainPanel.SetActive(false);
-        }
-        FinalDoor.WinGame = false;
+		if (FinalDoor.WinGame == true) {
+			savesPanel.SetActive(true);
+			mainPanel.SetActive(false);
+		}
+		FinalDoor.WinGame = false;
         
 	}
 
@@ -43,7 +45,7 @@ public class MenuManager : MonoBehaviour
 		SceneManager.LoadScene("FinalScene");
 	}
 
-	void SceneManager_sceneLoadedGameplay (Scene arg0, LoadSceneMode arg1)
+	void SceneManager_sceneLoadedGameplay(Scene arg0, LoadSceneMode arg1)
 	{
 		// Start recording the game scene
 		RecordingManager.StartRecording();
@@ -57,14 +59,14 @@ public class MenuManager : MonoBehaviour
 
 	public void RecordingsButtonPressed()
 	{
-		mainPanel.SetActive (false);
-		recordingsPanel.SetActive (true);
+		mainPanel.SetActive(false);
+		recordingsPanel.SetActive(true);
 	}
 
 	public void SettingsButtonPressed()
 	{
-		mainPanel.SetActive (false);
-		settingsPanel.SetActive (true);
+		mainPanel.SetActive(false);
+		settingsPanel.SetActive(true);
 	}
 
 	public void QuitButtonPressed()
@@ -73,12 +75,12 @@ public class MenuManager : MonoBehaviour
 	}
 
 	public void MainMenuButtonPressed()
-    {
-        SceneManager.LoadScene("MenuScene");
-        recordingsPanel.SetActive (false);
-		settingsPanel.SetActive (false);
-        savesPanel.SetActive(false);
-		mainPanel.SetActive (true);
+	{
+		SceneManager.LoadScene("MenuScene");
+		recordingsPanel.SetActive(false);
+		settingsPanel.SetActive(false);
+		savesPanel.SetActive(false);
+		mainPanel.SetActive(true);
 	}
 
 	private string FileNameFromSlotNumber(int slot)
@@ -94,17 +96,27 @@ public class MenuManager : MonoBehaviour
 		string fileName = FileNameFromSlotNumber(slot);
 		SavedRecording = Recording.Load(fileName);
 
+		StartPlayback();
+	}
+
+	void StartPlayback()
+	{
 		// Get notified when the scene has finished loading
 		SceneManager.sceneLoaded += SceneManager_sceneLoadedPlaybackRecording;
-
 		// Subscribe to event telling us when playback is complete
 		RecordingManager.PlaybackComplete += RecordingManager_PlaybackComplete;
-
 		// Load the game scene
 		SceneManager.LoadScene("FinalScene");
 	}
 
-	void SceneManager_sceneLoadedPlaybackRecording (Scene arg0, LoadSceneMode arg1)
+	public void LoadDemoRecording()
+	{
+		SavedRecording = Recording.Load(demoRecording);
+
+		StartPlayback();
+	}
+
+	void SceneManager_sceneLoadedPlaybackRecording(Scene arg0, LoadSceneMode arg1)
 	{
 		// Apply the saved recording to the scene
 		RecordingManager.SetRecordingOnActiveScene(SavedRecording);
