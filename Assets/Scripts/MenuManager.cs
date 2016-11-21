@@ -16,6 +16,7 @@ public class MenuManager : MonoBehaviour
 	public GameObject mainPanel;
 	public GameObject recordingsPanel;
 	public GameObject savesPanel;
+    public GameObject warningPanel;
 
 	public TextAsset demoRecording;
 
@@ -24,6 +25,7 @@ public class MenuManager : MonoBehaviour
 		recordingsPanel.SetActive(false);
 		settingsPanel.SetActive(false);
 		savesPanel.SetActive(false);
+        warningPanel.SetActive(false);
 
 		if (FinalDoor.WinGame == true) {
 			savesPanel.SetActive(true);
@@ -80,6 +82,7 @@ public class MenuManager : MonoBehaviour
 		recordingsPanel.SetActive(false);
 		settingsPanel.SetActive(false);
 		savesPanel.SetActive(false);
+        warningPanel.SetActive(false);
 		mainPanel.SetActive(true);
 	}
 
@@ -91,12 +94,14 @@ public class MenuManager : MonoBehaviour
 
 	public void LoadRecordingFromSlotButtonPressed(int slot)
 	{
+        recordingsPanel.SetActive(false);
+        warningPanel.SetActive(true);
 		// Load the recording file from disk
 		// Really we should check if the file exists and show an error message instead of just causing a file not found exception here.
 		string fileName = FileNameFromSlotNumber(slot);
 		SavedRecording = Recording.Load(fileName);
 
-		StartPlayback();
+		Invoke("StartPlayback", 3);
 	}
 
 	void StartPlayback()
@@ -111,10 +116,13 @@ public class MenuManager : MonoBehaviour
 
 	public void LoadDemoRecording()
 	{
-		SavedRecording = Recording.Load(demoRecording);
+        recordingsPanel.SetActive(false);
+        warningPanel.SetActive(true);
 
-		StartPlayback();
-	}
+        SavedRecording = Recording.Load(demoRecording);
+
+        Invoke("StartPlayback", 3);
+    }
 
 	void SceneManager_sceneLoadedPlaybackRecording(Scene arg0, LoadSceneMode arg1)
 	{
