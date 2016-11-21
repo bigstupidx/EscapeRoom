@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.IO;
 
 
 public class MenuManager : MonoBehaviour
@@ -17,6 +18,7 @@ public class MenuManager : MonoBehaviour
 	public GameObject recordingsPanel;
 	public GameObject savesPanel;
     public GameObject warningPanel;
+    public GameObject noRecordingPanel;
 
 	public TextAsset demoRecording;
 
@@ -62,6 +64,7 @@ public class MenuManager : MonoBehaviour
 	public void RecordingsButtonPressed()
 	{
 		mainPanel.SetActive(false);
+        noRecordingPanel.SetActive(false);
 		recordingsPanel.SetActive(true);
 	}
 
@@ -95,13 +98,21 @@ public class MenuManager : MonoBehaviour
 	public void LoadRecordingFromSlotButtonPressed(int slot)
 	{
         recordingsPanel.SetActive(false);
-        warningPanel.SetActive(true);
-		// Load the recording file from disk
-		// Really we should check if the file exists and show an error message instead of just causing a file not found exception here.
+        // Load the recording file from disk
+        // Really we should check if the file exists and show an error message instead of just causing a file not 
+        //found exception here.
 		string fileName = FileNameFromSlotNumber(slot);
-		SavedRecording = Recording.Load(fileName);
+        if (!(File.Exists(fileName))) 
+        {
+            noRecordingPanel.SetActive(true);
+        } else
+        {
+            warningPanel.SetActive(true);
+            SavedRecording = Recording.Load(fileName);
 
-		Invoke("StartPlayback", 3);
+            Invoke("StartPlayback", 3);
+        }
+		
 	}
 
 	void StartPlayback()
