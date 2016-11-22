@@ -102,7 +102,7 @@ public class MenuManager : MonoBehaviour
 		SavedRecording = null;
 
 		// Get notified when the scene has finished loading
-		SceneManager.sceneLoaded += SceneManager_sceneLoadedGameplay;
+		RecordingManager.SceneFullyLoaded += SceneManager_sceneLoadedGameplay;
 
 		// Set the next menu scene to load to be the saves scene
 		StartingPanel = Panels.Win;
@@ -111,7 +111,7 @@ public class MenuManager : MonoBehaviour
 		SceneManager.LoadScene("FinalScene");
 	}
 
-	void SceneManager_sceneLoadedGameplay(Scene arg0, LoadSceneMode arg1)
+	void SceneManager_sceneLoadedGameplay()//(Scene arg0, LoadSceneMode arg1)
 	{
 		// Start recording the game scene
 		RecordingManager.StartRecording();
@@ -120,7 +120,7 @@ public class MenuManager : MonoBehaviour
 		Statistics.StartTiming();
 
 		// Unsubscribe from notification
-		SceneManager.sceneLoaded -= SceneManager_sceneLoadedGameplay;
+		RecordingManager.SceneFullyLoaded -= SceneManager_sceneLoadedGameplay;
 	}
 
 	public void RecordingsButtonPressed()
@@ -180,7 +180,8 @@ public class MenuManager : MonoBehaviour
 	void StartPlayback()
 	{
 		// Get notified when the scene has finished loading
-		SceneManager.sceneLoaded += SceneManager_sceneLoadedPlaybackRecording;
+		//SceneManager.sceneLoaded += SceneManager_sceneLoadedPlaybackRecording;
+		RecordingManager.SceneFullyLoaded += SceneManager_sceneLoadedPlaybackRecording;
 
 		// Subscribe to event telling us when playback is complete
 		RecordingManager.PlaybackComplete += RecordingManager_PlaybackComplete;
@@ -203,7 +204,7 @@ public class MenuManager : MonoBehaviour
 		CurrentPanel = Panels.Iterations;
 	}
 
-	void SceneManager_sceneLoadedPlaybackRecording(Scene arg0, LoadSceneMode arg1)
+	void SceneManager_sceneLoadedPlaybackRecording()//Scene arg0, LoadSceneMode arg1)
 	{
 		// Apply the saved recording to the scene
 		RecordingManager.SetRecordingOnActiveScene(SavedRecording);
@@ -250,7 +251,8 @@ public class MenuManager : MonoBehaviour
 
 			// Unsubscribe
 			RecordingManager.PlaybackComplete -= RecordingManager_PlaybackComplete;
-			SceneManager.sceneLoaded -= SceneManager_sceneLoadedPlaybackRecording;
+			//SceneManager.sceneLoaded -= SceneManager_sceneLoadedPlaybackRecording;
+			RecordingManager.SceneFullyLoaded -= SceneManager_sceneLoadedPlaybackRecording;
 
 			//Calculate WinScene stats
 			Statistics.StopTiming();

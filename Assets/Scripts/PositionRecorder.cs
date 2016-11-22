@@ -8,11 +8,8 @@ public class PositionRecorder : MotionRecorder
 	// Animation curves to store recordings in
 	private Vector3Curve translations = new Vector3Curve();
 
-	protected override void RecordKeyFrame(float realTime)
+	protected override void RecordKeyFrame(float time)
 	{
-		// Save times relative to the begining of the recording
-		float time = realTime - recordingStartTime;
-
 		// Record position
 		Vector3 localPosition = this.transform.localPosition;
 
@@ -23,11 +20,8 @@ public class PositionRecorder : MotionRecorder
 		lastKeyTime = time;
 	}
 
-	protected override void SampleCurves(float realTime)
+	protected override void SampleCurves(float time)
 	{
-		// Get the time relative to the start of the animation playback
-		float time = realTime - playbackStartTime;
-
 		// Sample position from curves
 		Vector3 newLocalPosition = new Vector3();
 

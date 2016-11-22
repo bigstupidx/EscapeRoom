@@ -2,15 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using UnityEngine.UI;
+using System;
 
-public delegate void PlaybackCompleteHandler();
+public delegate void CompletionHandler();
 
 public class RecordingManager : MonoBehaviour
 {
 	/// <summary>
 	/// This event will be triggered when a recording that is being played back finishes playing.
 	/// </summary>
-	public static event PlaybackCompleteHandler PlaybackComplete;
+	public static event CompletionHandler PlaybackComplete;
+	public static event CompletionHandler SceneFullyLoaded;
 
 	/// <summary>
 	/// Storage for RecordingState property.
@@ -25,11 +28,22 @@ public class RecordingManager : MonoBehaviour
 		private set { _state = value; }
 	}
 
+	private bool sentFullyLoadedEvent = false;
+
 	/// <summary>
 	/// Called once per frame.  It is used to update the state of the recording during playback and trigger the PlaybackComplete event when playback is done.
 	/// </summary>
 	void Update()
 	{
+		// If level time is close to zero, then we may have started recording/playing before the start of the scene.
+		// Restart the operation
+		float levelTime = Time.timeSinceLevelLoad;
+			if (SceneFullyLoaded != null) {
+				SceneFullyLoaded();
+			}
+			sentFullyLoadedEvent = true;
+		}
+
 		// This loop is here because I decided to delay deactivation of GazeInputModules until the next frame.  It seemed to be causing problems to
 		// deactivate them when StartPlayback was called.
 		foreach (GazeInputModule gim in modulesToDeactivate) {
@@ -41,17 +55,19 @@ public class RecordingManager : MonoBehaviour
 		modulesToDeactivate.Clear();
 
 		// Now the main task of this function - Check if playback is done
-		if (State == RecordingState.Playing) {
-			if (Time.realtimeSinceStartup - playbackStartTime > playbackLength) {
-				StopPlayback();
+		float realTime = Time.realtimeSinceStartup;
 
-				// Fire a playback complete event so that subscribed classes can react (for example, to show a screen with recorded stats)
-				if (PlaybackComplete != null) {
-					PlaybackComplete();
+		if (State == RecordingState.Playing) {
+			if (realTime - playbackStartTime > playbackLength) {
+					StopPlayback();
+
+					// Fire a playback complete event so that subscribed classes can react (for example, to show a screen with recorded stats)
+					if (PlaybackComplete != null) {
+						PlaybackComplete();
+					}
 				}
 			}
-		}
-	}
+		}		
 
 	/// <summary>
 	/// Starts recording on the current scene.  It iterates through all Recorder scripts attached to objects in the scene and tells them
@@ -66,11 +82,13 @@ public class RecordingManager : MonoBehaviour
 			throw new UnityException("State must be 'Inactive' to start a new recording.");
 		}
 
+		float startTime = Time.realtimeSinceStartup;
+
 		// Find all Recorder objects in the scene and tell them to start recording
-		foreach (object obj in Object.FindObjectsOfType(typeof(Recorder))) {
+		foreach (object obj in FindObjectsOfType(typeof(Recorder))) {
 			Recorder r = obj as Recorder;
 			if (r != null) {
-				r.StartRecording();
+				r.StartRecording(startTime);
 			}
 		}
 
@@ -92,7 +110,7 @@ public class RecordingManager : MonoBehaviour
 		}
 
 		// Find all Recorder objects in the scene and tell them to stop recording
-		foreach (object obj in Object.FindObjectsOfType(typeof(Recorder))) {
+		foreach (object obj in FindObjectsOfType(typeof(Recorder))) {
 			Recorder r = obj as Recorder;
 			if (r != null) {
 				r.StopRecording();
@@ -102,7 +120,46 @@ public class RecordingManager : MonoBehaviour
 		// Set new state value
 		State = RecordingState.Inactive;
 	}
-		
+
+	public static void RestartRecording()
+	{
+		// Can only stop recording from Recording state
+		if (State != RecordingState.Recording) {
+			throw new UnityException("State must be 'Recording' to restart recording.");
+		}
+
+		float startTime = Time.realtimeSinceStartup;
+
+		// Find all Recorder objects in the scene and tell them to stop recording, clear them, and start recording again
+		foreach (object obj in FindObjectsOfType(typeof(Recorder))) {
+			Recorder r = obj as Recorder;
+			if (r != null) {
+				r.StopRecording();
+				r.Clear();
+				r.StartRecording(startTime);
+			}
+		}
+	}
+
+	public static void RestartPlayback()
+	{
+		// Otherwise, state should be "Playing" in order to stop playback.
+		if (State != RecordingState.Playing) {
+			throw new UnityException("State must be 'Playing' or 'Inactive' to restart playback.");
+		}
+
+		playbackStartTime = Time.realtimeSinceStartup;
+
+		// Find all Recorder objects in the scene and tell them to stop playing and then start again
+		foreach (object obj in FindObjectsOfType(typeof(Recorder))) {
+			Recorder r = obj as Recorder;
+			if (r != null) {
+				r.StopPlayback();
+				r.StartPlayback(playbackStartTime);
+			}
+		}
+	}
+
 	/// <summary>
 	/// Starts playback on the current scene.  It iterates through all Recorder scripts attached to objects in the scene and tells them
 	/// to start playing, so it won't do anything unless there are Recorder scripts in the scene.  When playback is done, the PlaybackComplete
@@ -120,7 +177,7 @@ public class RecordingManager : MonoBehaviour
 		playbackStartTime = Time.realtimeSinceStartup;
 
 		// Find GazeInputModule objects and deactivate them
-		foreach (object obj in Object.FindObjectsOfType(typeof(GazeInputModule))) {
+		foreach (object obj in FindObjectsOfType(typeof(GazeInputModule))) {
 			GazeInputModule gim = obj as GazeInputModule;
 			if (gim != null) {
 				modulesToDeactivate.Add(gim);
@@ -128,7 +185,7 @@ public class RecordingManager : MonoBehaviour
 		}
 
 		// Find GvrHead objects and disable them
-		foreach (object obj in Object.FindObjectsOfType(typeof(GvrHead))) {
+		foreach (object obj in FindObjectsOfType(typeof(GvrHead))) {
 			GvrHead head = obj as GvrHead;
 			if (head != null) {
 				head.enabled = false;
@@ -137,10 +194,10 @@ public class RecordingManager : MonoBehaviour
 
 		// Find all Recorder objects in the scene and tell them to start playing
 		playbackLength = 0.0f;
-		foreach (object obj in Object.FindObjectsOfType(typeof(Recorder))) {
+		foreach (object obj in FindObjectsOfType(typeof(Recorder))) {
 			Recorder r = obj as Recorder;
 			if (r != null) {
-				r.StartPlayback();
+				r.StartPlayback(playbackStartTime);
 
 				// Record the longest length value
 				if (r.Length > playbackLength) {
@@ -173,7 +230,7 @@ public class RecordingManager : MonoBehaviour
 		}
 
 		// Find all Recorder objects in the scene and tell them to stop playing
-		foreach (object obj in Object.FindObjectsOfType(typeof(Recorder))) {
+		foreach (object obj in FindObjectsOfType(typeof(Recorder))) {
 			Recorder r = obj as Recorder;
 			if (r != null) {
 				r.StopPlayback();
@@ -181,7 +238,7 @@ public class RecordingManager : MonoBehaviour
 		}
 
 		// Find GvrHead objects and enable them
-		foreach (object obj in Object.FindObjectsOfType(typeof(GvrHead))) {
+		foreach (object obj in FindObjectsOfType(typeof(GvrHead))) {
 			GvrHead head = obj as GvrHead;
 			if (head != null) {
 				head.enabled = true;
@@ -189,7 +246,7 @@ public class RecordingManager : MonoBehaviour
 		}
 
 		// Find GazeInputModule objects and activate them
-		foreach (object obj in Object.FindObjectsOfType(typeof(GazeInputModule))) {
+		foreach (object obj in FindObjectsOfType(typeof(GazeInputModule))) {
 			GazeInputModule gim = obj as GazeInputModule;
 			if (gim != null) {
 				gim.enabled = true;
@@ -212,7 +269,7 @@ public class RecordingManager : MonoBehaviour
 		Recording recording = new Recording();
 
 		// Find all Recorder objects in the scene and add their timelines to the recording
-		foreach (object obj in Object.FindObjectsOfType(typeof(Recorder))) {
+		foreach (object obj in FindObjectsOfType(typeof(Recorder))) {
 			Recorder recorder = obj as Recorder;
 
 			if (recorder != null) {
@@ -248,7 +305,7 @@ public class RecordingManager : MonoBehaviour
 		}
 
 		// Find all Recorder objects in the scene and apply a timeline if it matches the name
-		foreach (object obj in Object.FindObjectsOfType(typeof(Recorder))) {
+		foreach (object obj in FindObjectsOfType(typeof(Recorder))) {
 			Recorder recorder = obj as Recorder;
 			if (recorder != null) {
 				List<Recording.Timeline> list = null;

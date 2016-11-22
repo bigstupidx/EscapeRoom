@@ -8,11 +8,8 @@ public class RotationRecorder : MotionRecorder
 	// Animation curves to store recordings in
 	private Vector4Curve rotations = new Vector4Curve();
 
-	protected override void RecordKeyFrame(float realTime)
+	protected override void RecordKeyFrame(float time)
 	{
-		// Save times relative to the begining of the recording
-		float time = realTime - recordingStartTime;
-
 		// Record orientation
 		Quaternion localRotation = this.transform.localRotation;
 
@@ -24,11 +21,8 @@ public class RotationRecorder : MotionRecorder
 		lastKeyTime = time;
 	}
 
-	protected override void SampleCurves(float realTime)
+	protected override void SampleCurves(float time)
 	{
-		// Get the time relative to the start of the animation playback
-		float time = realTime - playbackStartTime;
-
 		// Sample rotation from curves
 		Quaternion newLocalRotation = new Quaternion();
 
