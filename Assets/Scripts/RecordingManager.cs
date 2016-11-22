@@ -38,6 +38,7 @@ public class RecordingManager : MonoBehaviour
 		// If level time is close to zero, then we may have started recording/playing before the start of the scene.
 		// Restart the operation
 		float levelTime = Time.timeSinceLevelLoad;
+		if (!sentFullyLoadedEvent && levelTime > 0) {
 			if (SceneFullyLoaded != null) {
 				SceneFullyLoaded();
 			}
