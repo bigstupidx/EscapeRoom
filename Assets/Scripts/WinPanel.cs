@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System;
+using System.Text;
 
 public class WinPanel : MonoBehaviour {
     public Text text;
@@ -10,12 +12,11 @@ public class WinPanel : MonoBehaviour {
     void Start()
     {
         
-        string message = "You have Won!\n";
-        message += string.Format("Total Frames: {0:0.00}\n", Statistics.TotalFrames);
-        message += string.Format("Average Frames: {0:0.00}\n", Statistics.AvgFPS);
-        message += string.Format("Dropped Frames: {0:0.00}\n", Statistics.DroppedFrames);
-        message += string.Format("Total Time: {0:0.00}\n", Statistics.TotalTime);
-        message += "Would you like to save your replay?";
-        text.text = message;
+		StringBuilder builder = new StringBuilder();
+		builder.AppendLine(string.Format("Average FPS: {0:0.00}", Statistics.AvgFPS));
+		builder.AppendLine(string.Format("Total Frames: {0}", Statistics.TotalFrames));
+		builder.AppendLine(string.Format("Dropped Frames: {0}", Statistics.DroppedFrames));
+		builder.Append(string.Format("Total Time: {0}:{1:00.0}", Math.Floor(Statistics.TotalTime / 60.0), Statistics.TotalTime % 60));
+		text.text = builder.ToString();
     }
 }

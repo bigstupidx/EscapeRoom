@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 public class FinalDoor : Lockable {
 
 	public Pickup [] keys;
-    public static bool WinGame = false;
 
 	public override bool CanUnlock()
 	{
@@ -16,24 +15,21 @@ public class FinalDoor : Lockable {
 			}
 		}*/
 
-        WinGame = true;
-
-        if (RecordingManager.State == RecordingState.Recording) {
-			// Load the win scene
-			SceneManager.LoadScene("MenuScene");
-
-            
-           
-            // Stop recording
-            RecordingManager.StopRecording();
-
-            //Calculate WinScene stats
-            Statistics.StopTiming();
-
-            // Save the recording into the static variable of the MenuManager
-            MenuManager.SavedRecording = RecordingManager.GetRecordingFromActiveScene();
-        }
+		if (RecordingManager.State == RecordingState.Recording) {
+			Invoke("LoadMenuScene", 0.5f);
+		}
 
 		return true;
+	}
+
+	private void LoadMenuScene()
+	{
+		// Load the win scene
+		SceneManager.LoadScene("MenuScene");
+		// Stop recording
+		RecordingManager.StopRecording();
+		Statistics.StopTiming();
+		// Save the recording into the static variable of the MenuManager
+		MenuManager.SavedRecording = RecordingManager.GetRecordingFromActiveScene();
 	}
 }

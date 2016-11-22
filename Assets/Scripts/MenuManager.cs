@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.IO;
+using System.Collections.Generic;
+using System;
 
 
 public class MenuManager : MonoBehaviour
@@ -13,28 +15,85 @@ public class MenuManager : MonoBehaviour
 	/// <value>The saved recording.</value>
 	public static Recording SavedRecording { get; set; }
 
-	public GameObject settingsPanel;
-	public GameObject mainPanel;
-	public GameObject recordingsPanel;
-	public GameObject savesPanel;
-    public GameObject warningPanel;
-    public GameObject noRecordingPanel;
+	public enum Panels
+	{
+		Main,
+		Settings,
+		Recordings,
+		Saves,
+		Warning,
+		NoRecording,
+		Win,
+		Stats,
+		Iterations
+	}
 
 	public TextAsset demoRecording;
 
+	[Serializable]
+	public class PanelDescription
+	{
+		public Panels type;
+		public GameObject panel;
+	}
+
+	public PanelDescription[] panels;
+
+	private Dictionary<Panels, GameObject> panelDictionary = new Dictionary<Panels, GameObject>();
+
+	public Button[] loadRecordingButtons = new Button[4];
+
 	void Start()
 	{
-		recordingsPanel.SetActive(false);
-		settingsPanel.SetActive(false);
-		savesPanel.SetActive(false);
-        warningPanel.SetActive(false);
-
-		if (FinalDoor.WinGame == true) {
-			savesPanel.SetActive(true);
-			mainPanel.SetActive(false);
+		// Add all the panels to a dictionary (hashmap) for easy lookup
+		foreach (PanelDescription d in panels) {
+			panelDictionary[d.type] = d.panel;
 		}
-		FinalDoor.WinGame = false;
-        
+
+		// Recenter the GVRViewer so that the menu is always in front of the user when scene loads
+		GvrViewer viewer = FindObjectOfType<GvrViewer>();
+		if (viewer != null) {
+			viewer.Recenter();
+		}
+
+		// Activate the initial screen using the static StartingScreen property which may have been set by another class.
+		CurrentPanel = StartingPanel;
+
+		// Reset the starting panel back to main for next time
+		StartingPanel = Panels.Main;
+	}
+
+	private static Panels _startingPanel = Panels.Main;
+
+	public static Panels StartingPanel {
+		get { return _startingPanel; }
+		set { _startingPanel = value; }
+	}
+
+	private Panels? _currentPanel = null;
+
+	public Panels? CurrentPanel {
+		get { return _currentPanel; }
+		set {
+			// Check if the value has changed
+			if (value == _currentPanel) {
+				// It's the same so do nothing
+				return;
+			}
+
+			// Deactivate all panels (The active one will be activated later)
+			foreach (GameObject panel in panelDictionary.Values) {
+				panel.SetActive(false);
+			}
+
+			// Commit new value
+			_currentPanel = value;
+
+			// Activate the new current screen, if any
+			if (_currentPanel != null) {
+				panelDictionary[(Panels)_currentPanel].SetActive(true);
+			}
+		}
 	}
 
 	public void PlayButtonPressed()
@@ -44,6 +103,9 @@ public class MenuManager : MonoBehaviour
 
 		// Get notified when the scene has finished loading
 		SceneManager.sceneLoaded += SceneManager_sceneLoadedGameplay;
+
+		// Set the next menu scene to load to be the saves scene
+		StartingPanel = Panels.Win;
 
 		// Load the game scene
 		SceneManager.LoadScene("FinalScene");
@@ -63,15 +125,17 @@ public class MenuManager : MonoBehaviour
 
 	public void RecordingsButtonPressed()
 	{
-		mainPanel.SetActive(false);
-        noRecordingPanel.SetActive(false);
-		recordingsPanel.SetActive(true);
+		CurrentPanel = Panels.Recordings;
+
+		// Disable button if file does not exist
+		for (int i = 0; i < 4; ++i) {
+			loadRecordingButtons[i].interactable = File.Exists(FileNameFromSlotNumber(i + 1));
+		}
 	}
 
 	public void SettingsButtonPressed()
 	{
-		mainPanel.SetActive(false);
-		settingsPanel.SetActive(true);
+		CurrentPanel = Panels.Settings;
 	}
 
 	public void QuitButtonPressed()
@@ -81,70 +145,81 @@ public class MenuManager : MonoBehaviour
 
 	public void MainMenuButtonPressed()
 	{
-		SceneManager.LoadScene("MenuScene");
-		recordingsPanel.SetActive(false);
-		settingsPanel.SetActive(false);
-		savesPanel.SetActive(false);
-        warningPanel.SetActive(false);
-		mainPanel.SetActive(true);
+		CurrentPanel = Panels.Main;
 	}
 
 	private string FileNameFromSlotNumber(int slot)
 	{
 		// Generate file name in the format slot#Recording.xml
-		return string.Format("slot{0}Recording.xml", slot);
+		return string.Format("{0}{1}slot{2}Recording.xml", Application.persistentDataPath, Path.DirectorySeparatorChar, slot);
 	}
 
 	public void LoadRecordingFromSlotButtonPressed(int slot)
 	{
-        recordingsPanel.SetActive(false);
-        // Load the recording file from disk
-        // Really we should check if the file exists and show an error message instead of just causing a file not 
-        //found exception here.
-		string fileName = FileNameFromSlotNumber(slot);
-        if (!(File.Exists(fileName))) 
-        {
-            noRecordingPanel.SetActive(true);
-        } else
-        {
-            warningPanel.SetActive(true);
-            SavedRecording = Recording.Load(fileName);
-
-            Invoke("StartPlayback", 3);
-        }
-		
+		// Load the recording file from disk
+		// Really we should check if the file exists and show an error message instead of just causing a file not 
+		//found exception here.
+		if (File.Exists(FileNameFromSlotNumber(slot))) {
+			SavedRecording = Recording.Load(FileNameFromSlotNumber(slot));
+			CurrentPanel = Panels.Iterations;
+		} else {	
+			CurrentPanel = Panels.NoRecording;
+		}
 	}
+
+	public void SelectIterationsButtonPressed(int iterations)
+	{
+		CurrentPanel = Panels.Warning;
+		remainingIterations = iterations;
+		Invoke("StartPlayback", 1.5f);
+	}
+
+	private int remainingIterations = 1;
+	private bool firstIteration = true;
 
 	void StartPlayback()
 	{
 		// Get notified when the scene has finished loading
 		SceneManager.sceneLoaded += SceneManager_sceneLoadedPlaybackRecording;
+
 		// Subscribe to event telling us when playback is complete
 		RecordingManager.PlaybackComplete += RecordingManager_PlaybackComplete;
+
+		// Set the next menu scene to load to be the saves scene
+		StartingPanel = Panels.Stats;
+
+		// Note that this is the first iteration for the callback so that timing can be started
+		firstIteration = true;
+
 		// Load the game scene
 		SceneManager.LoadScene("FinalScene");
+
+		Statistics.StartTiming();
 	}
 
 	public void LoadDemoRecording()
 	{
-        recordingsPanel.SetActive(false);
-        warningPanel.SetActive(true);
-
-        SavedRecording = Recording.Load(demoRecording);
-
-        Invoke("StartPlayback", 3);
-    }
+		SavedRecording = Recording.Load(demoRecording);
+		CurrentPanel = Panels.Iterations;
+	}
 
 	void SceneManager_sceneLoadedPlaybackRecording(Scene arg0, LoadSceneMode arg1)
 	{
 		// Apply the saved recording to the scene
 		RecordingManager.SetRecordingOnActiveScene(SavedRecording);
 
+		if (firstIteration) {
+			Statistics.StartTiming();
+			firstIteration = false;
+		}
+
 		// Start playing back the recording
 		RecordingManager.StartPlayback();
+	}
 
-		// Unsubscribe from notification
-		SceneManager.sceneLoaded -= SceneManager_sceneLoadedPlaybackRecording;
+	public void SaveRecordingYesButtonPressed()
+	{
+		CurrentPanel = Panels.Saves;
 	}
 
 	public void SaveRecordingToSlotButtonPressed(int slot)
@@ -168,12 +243,23 @@ public class MenuManager : MonoBehaviour
 	/// </summary>
 	void RecordingManager_PlaybackComplete()
 	{
-		// For now we are assuming one iteration, so we are done.  
+		remainingIterations--;
 
-		// Unsubscribe
-		RecordingManager.PlaybackComplete -= RecordingManager_PlaybackComplete;
+		if (remainingIterations == 0) {
+			// There are no iterations left, so we are done.  Clean up
 
-		// Return to main menu
-		SceneManager.LoadScene("MenuScene");
+			// Unsubscribe
+			RecordingManager.PlaybackComplete -= RecordingManager_PlaybackComplete;
+			SceneManager.sceneLoaded -= SceneManager_sceneLoadedPlaybackRecording;
+
+			//Calculate WinScene stats
+			Statistics.StopTiming();
+
+			// Return to main menu
+			SceneManager.LoadScene("MenuScene");
+		} else {
+			// We need to play the scene again
+			SceneManager.LoadScene("FinalScene");
+		}
 	}
 }

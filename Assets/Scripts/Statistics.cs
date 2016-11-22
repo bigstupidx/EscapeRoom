@@ -4,6 +4,9 @@ using System.Collections;
 // An FPS counter.
 // It calculates frames/second over each updateInterval,
 // so the display does not keep changing wildly.
+using System;
+
+
 public class Statistics : MonoBehaviour
 {
 	public static int TotalFrames { get; private set; }
@@ -11,7 +14,7 @@ public class Statistics : MonoBehaviour
     public static float FPS { get; private set; }
     public static float AvgFPS { get; private set; }
 	public static float TotalTime { get; private set; }
-	public static float DroppedFrames { get; private set; }
+	public static int DroppedFrames { get; private set; }
 
 	public static void StartTiming() {
 		TotalFrames = 0;
@@ -36,7 +39,7 @@ public class Statistics : MonoBehaviour
 
         TotalTime = Time.realtimeSinceStartup - StartTime;
         AvgFPS = TotalFrames / TotalTime;
-        DroppedFrames = TotalTime * 60 - TotalFrames;
+		DroppedFrames = (int)Math.Floor(TotalTime * 60) - TotalFrames;
     }
 
 }
