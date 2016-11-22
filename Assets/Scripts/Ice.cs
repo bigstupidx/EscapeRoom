@@ -7,7 +7,6 @@ public class Ice : Focusable
 {
 
     public GameObject iceCube;
-    public GameObject toilet;
     private bool isClicked;
     // Use this for initialization
     void Start()
