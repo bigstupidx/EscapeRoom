@@ -171,11 +171,15 @@ public class MenuManager : MonoBehaviour
 	{
 		CurrentPanel = Panels.Warning;
 		remainingIterations = iterations;
-		Invoke("StartPlayback", 1.5f);
+		Invoke("InvokePlayback", 1.5f);
 	}
 
 	public static int remainingIterations = 1;
 	private static bool firstIteration = true;
+
+	private void InvokePlayback() {
+		StartPlayback();
+	}
 
 	public static void StartPlayback()
 	{

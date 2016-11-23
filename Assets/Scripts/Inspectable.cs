@@ -39,12 +39,6 @@ public class Inspectable : Focusable {
 			Vector3 cameraPos = Camera.main.transform.position;
 			Vector3 cameraGoal = Util.GetPointBetweenPositionAndCamera(originalPosition, 1.0f);
 
-			// Move the (invisible) inspection menu canvas to the camera position
-			manager.inspectionCanvas.transform.position = cameraGoal;
-
-			// Rotate it to face the camera
-			Util.RotateToFaceCamera(manager.inspectionCanvas.transform);
-
 			// Move the object to camera goal position
 			GoalMover mover = gameObject.GetComponent<GoalMover>();
 			mover.ClearGoals();
@@ -74,11 +68,9 @@ public class Inspectable : Focusable {
 			t.gameObject.layer = (int)Layers.InspectedObject;
 		}
 
-		// Make the inspection manager canvas visible
-		InspectionManager manager = FindObjectOfType<InspectionManager>();
-
 		// Show rotation buttons
-		manager.inspectionCanvas.gameObject.SetActive(true);
+		InspectionManager manager = FindObjectOfType<InspectionManager>();
+		manager.ShowCanvas(gameObject.transform.position);
 
 		// Unregister handler
 		GoalMover mover = gameObject.GetComponent<GoalMover>();
@@ -98,7 +90,7 @@ public class Inspectable : Focusable {
 			mover.AddGoal(originalPosition, originalRotation);
 
 			// Remove rotation buttons
-			manager.inspectionCanvas.gameObject.SetActive(false);
+			manager.HideCanvas();
 
 			mover.MovementComplete += Mover_PutDownMovementComplete;
 
