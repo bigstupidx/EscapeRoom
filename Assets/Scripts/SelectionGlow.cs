@@ -109,7 +109,7 @@ public class SelectionGlow : PostEffectsBase
 		tempCam.backgroundColor = Color.black;
 		tempCam.clearFlags = CameraClearFlags.Nothing;
 		tempCam.cullingMask = 1 << 8;
-		tempCam.RenderWithShader(solidColorShader, "");
+		tempCam.RenderWithShader(solidColorShader, "RenderType");
 
 		float widthMod = 1.0f / (1.0f * (1 << downsample));
 	
