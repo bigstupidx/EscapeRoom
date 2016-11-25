@@ -4,9 +4,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Fire : Searchable {
-    public Ice ice;
     public GameObject iceCube;
     public GameObject key;
+    public GameObject block;
+    public GameObject campfire;
     private int remaining;
 	// Use this for initialization
 	void Start () {
@@ -21,10 +22,13 @@ public class Fire : Searchable {
     }
     public override void OnPointerClick(PointerEventData eventData)
     {
-        if (iceCube.GetComponent<Pickup>().IsFound)
+        if (campfire.activeSelf)
         {
-            iceCube.transform.position = new Vector3(-3.64f, .79f, -4.11f);
-            InvokeRepeating("countDown", 1, 1);
+            if (block.GetComponent<Pickup>().IsFound)
+            {
+                block.transform.position = new Vector3(4.65f, .685f, -1.39f);
+                InvokeRepeating("countDown", 1, 1);
+            }
         }
     }
 
@@ -42,7 +46,7 @@ public class Fire : Searchable {
         if (remaining <= 0)
         {
             iceCube.SetActive(false);
-            key.transform.position = new Vector3(-6.382f, .22f, -3.638f);
+            key.transform.position = new Vector3(3.6619f, .0773f, -1.543446f);
             CancelInvoke("countDown");
         }
     }
