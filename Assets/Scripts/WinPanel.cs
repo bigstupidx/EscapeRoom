@@ -14,8 +14,8 @@ public class WinPanel : MonoBehaviour {
         
 		StringBuilder builder = new StringBuilder();
 		builder.AppendLine(string.Format("Average FPS: {0:0.00}", Statistics.AvgFPS));
-		builder.AppendLine(string.Format("Total Frames: {0}", Statistics.TotalFrames));
-		builder.AppendLine(string.Format("Dropped Frames: {0}", Statistics.DroppedFrames));
+		builder.AppendLine(string.Format("Total Frames: {0:n}", Statistics.TotalFrames));
+		builder.AppendLine(string.Format("Dropped Frames: {0:n}", Math.Max(Statistics.DroppedFrames, 0)));
 		builder.Append(string.Format("Total Time: {0}:{1:00.0}", Math.Floor(Statistics.TotalTime / 60.0), Statistics.TotalTime % 60));
 		text.text = builder.ToString();
     }

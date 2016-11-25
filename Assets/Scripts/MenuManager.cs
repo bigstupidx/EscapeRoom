@@ -171,13 +171,17 @@ public class MenuManager : MonoBehaviour
 	{
 		CurrentPanel = Panels.Warning;
 		remainingIterations = iterations;
-		Invoke("StartPlayback", 1.5f);
+		Invoke("InvokePlayback", 1.5f);
 	}
 
-	private int remainingIterations = 1;
-	private bool firstIteration = true;
+	public static int remainingIterations = 1;
+	private static bool firstIteration = true;
 
-	void StartPlayback()
+	private void InvokePlayback() {
+		StartPlayback();
+	}
+
+	public static void StartPlayback()
 	{
 		// Get notified when the scene has finished loading
 		//SceneManager.sceneLoaded += SceneManager_sceneLoadedPlaybackRecording;
@@ -204,7 +208,7 @@ public class MenuManager : MonoBehaviour
 		CurrentPanel = Panels.Iterations;
 	}
 
-	void SceneManager_sceneLoadedPlaybackRecording()//Scene arg0, LoadSceneMode arg1)
+	static void SceneManager_sceneLoadedPlaybackRecording()//Scene arg0, LoadSceneMode arg1)
 	{
 		// Apply the saved recording to the scene
 		RecordingManager.SetRecordingOnActiveScene(SavedRecording);
@@ -242,7 +246,7 @@ public class MenuManager : MonoBehaviour
 	/// If there are more iterations to play, it will reload the scene and start playback again.
 	/// Otherwise, it will unsubscribe.
 	/// </summary>
-	void RecordingManager_PlaybackComplete()
+	static void RecordingManager_PlaybackComplete()
 	{
 		remainingIterations--;
 
