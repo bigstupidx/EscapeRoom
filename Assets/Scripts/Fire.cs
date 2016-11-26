@@ -35,14 +35,9 @@ public class Fire : Searchable {
     public void countDown()
     {
         remaining--;
-        // Display the message using the Notification Manager
-        NotificationManager manager = FindObjectOfType<NotificationManager>();
-        message = "Melting, please wait!";
-        if (manager != null)
-        {
-            if(!manager.GetComponentInChildren<Text>())
-                manager.ShowNotification(message, iceCube.transform.position);
-        }
+        // Display the message
+		DisplayMessage("Melting, please wait!");
+        
         if (remaining <= 0)
         {
             iceCube.SetActive(false);

@@ -19,5 +19,11 @@ public static class Util
 		Quaternion camRotation = Camera.main.transform.rotation;
 		t.LookAt(t.position + camRotation * Vector3.forward, camRotation * Vector3.up);
 	}
+
+	public static void RotateAroundYToFaceCamera(Transform t)
+	{
+		t.LookAt(Camera.main.transform, Vector3.up);
+		t.Rotate(0, 180, 0, Space.World);
+	}
 }
 

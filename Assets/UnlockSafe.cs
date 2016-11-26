@@ -9,10 +9,12 @@ public class UnlockSafe : MonoBehaviour {
 	public GameObject openSafeTop;
 	public GameObject keyPad;
 	public Searchable safe;
+	private static readonly Vector3 hiddenPosition = new Vector3(1000, 1000, 1000);
 
 	// Use this for initialization
 	void Start () {
 		codeEntry = "";
+		Hide();
 	}
 	
 	// Update is called once per frame
@@ -22,8 +24,19 @@ public class UnlockSafe : MonoBehaviour {
 			Quaternion rot = openSafeTop.transform.rotation;
 		
 			safeTop.AddGoal (pos, rot, null);
-			keyPad.SetActive (false);
+			Hide();
 			safe.message = "Safe Unlocked!";
 		}
+	}
+
+	public void Hide()
+	{
+		keyPad.transform.position = hiddenPosition;
+	}
+
+	public void Show(Vector3 position)
+	{
+		keyPad.transform.position = position;
+		Util.RotateAroundYToFaceCamera(keyPad.transform);
 	}
 }
