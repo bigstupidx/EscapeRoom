@@ -13,7 +13,7 @@ public class Chair : Searchable{
 
     void Start()
     {
-        log.SetActive(false);
+		log.GetComponent<MeshRenderer>().enabled = false;
     }
     public override void OnPointerClick(PointerEventData eventData)
     {
@@ -35,8 +35,8 @@ public class Chair : Searchable{
 
     void Mover_FinishSelection()
     {
-        log.SetActive(true);
-        gameObject.SetActive(false);
+		log.GetComponent<MeshRenderer>().enabled = true;
+		gameObject.GetComponent<MeshRenderer>().enabled = false;
         mover.AddGoal(Pos1.transform.position, Pos1.transform.rotation);
         mover.AddGoal(InventoryPosition.transform.position, InventoryPosition.transform.rotation);
         mover.MovementComplete -= Mover_FinishSelection;
