@@ -72,8 +72,17 @@ public class SelectionGlow : PostEffectsBase
 	{
 		ClearGlowingObjects();
 
-		if (blurMaterial)
+		if (blurMaterial) {
 			DestroyImmediate(blurMaterial);
+		}
+
+		if (tempCam) {
+			DestroyImmediate(tempCam);
+		}
+
+		if (addBrightStuffBlendOneOneMaterial) {
+			DestroyImmediate(addBrightStuffBlendOneOneMaterial);
+		}
 	}
 
 	public void OnRenderImage(RenderTexture source, RenderTexture destination)
