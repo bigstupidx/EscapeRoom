@@ -6143,16 +6143,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 14
       objectReference: {fileID: 0}
-    - target: {fileID: 23000012606477442, guid: 2a496a56f6cde384e87fda495874f14e,
+    - target: {fileID: 114000011043860346, guid: 2a496a56f6cde384e87fda495874f14e,
         type: 2}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: InventoryPosition
       value: 
-      objectReference: {fileID: 2100000, guid: 4c31791ac8120ae488c033b3f3b9f24a, type: 2}
-    - target: {fileID: 23000012606477442, guid: 2a496a56f6cde384e87fda495874f14e,
-        type: 2}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: 4adcb1ef28d870e4091a4d86ba60e479, type: 2}
+      objectReference: {fileID: 1926953687}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2a496a56f6cde384e87fda495874f14e, type: 2}
   m_IsPrefabParent: 0
@@ -6675,20 +6670,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4000010401929888, guid: 75842fe97d0a383419dac5ae6789c9de, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -0.17600001
-      objectReference: {fileID: 0}
-    - target: {fileID: 23000011904255882, guid: 75842fe97d0a383419dac5ae6789c9de,
+    - target: {fileID: 114000011836718150, guid: 75842fe97d0a383419dac5ae6789c9de,
         type: 2}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: InventoryPosition
       value: 
-      objectReference: {fileID: 2100000, guid: f1aabf59df9d1db43a0806e97817e3fe, type: 2}
-    - target: {fileID: 23000011904255882, guid: 75842fe97d0a383419dac5ae6789c9de,
-        type: 2}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: 3acfec90064302e45a7fb71811475446, type: 2}
+      objectReference: {fileID: 1926953687}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 75842fe97d0a383419dac5ae6789c9de, type: 2}
   m_IsPrefabParent: 0
@@ -6928,75 +6914,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 251075869}
   m_RootOrder: 3
---- !u!1 &955314544 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1000012874070650, guid: 2a496a56f6cde384e87fda495874f14e,
-    type: 2}
-  m_PrefabInternal: {fileID: 829345710}
---- !u!114 &955314545
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 955314544}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eadac8e6e0248d4c9f41d1683746e7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxSpeed: 3
-  maxAcceleration: 1
-  slowRadius: 5
-  targetRadius: 0.01
-  velocity: {x: 0, y: 0, z: 0}
-  acceleration: {x: 0, y: 0, z: 0}
-  rotationSpeed: 0
-  angularAcceleration: 0
-  maxAngularAcceleration: 50
-  maxRotationSpeed: 180
-  slowAngle: 50
---- !u!114 &955314546
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 955314544}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c359ad154dfd2f74e9772d166c4b88df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  message: You found part of a picture.
-  IsFound: 0
-  InventoryPosition: {fileID: 1926953687}
 --- !u!4 &955314547 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4000010300361382, guid: 2a496a56f6cde384e87fda495874f14e,
     type: 2}
   m_PrefabInternal: {fileID: 829345710}
---- !u!65 &955314548
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 955314544}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.5605921, y: 0.5430705, z: 0.007884068}
-  m_Center: {x: 0, y: 0, z: -0.01088361}
---- !u!114 &955314549
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 955314544}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c114d81145fbbf54c8cf799fff332015, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &973209076 stripped
 Transform:
   m_PrefabParentObject: {fileID: 455270, guid: e2a5eda22969ef34c883fa5064ef555a, type: 2}
@@ -15757,70 +15679,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 580513080}
   m_RootOrder: 8
---- !u!1 &2141475477 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1000010279532764, guid: 75842fe97d0a383419dac5ae6789c9de,
-    type: 2}
-  m_PrefabInternal: {fileID: 909881176}
---- !u!114 &2141475478
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2141475477}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eadac8e6e0248d4c9f41d1683746e7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxSpeed: 3
-  maxAcceleration: 1
-  slowRadius: 5
-  targetRadius: 0.01
-  velocity: {x: 0, y: 0, z: 0}
-  acceleration: {x: 0, y: 0, z: 0}
-  rotationSpeed: 0
-  angularAcceleration: 0
-  maxAngularAcceleration: 50
-  maxRotationSpeed: 180
-  slowAngle: 50
---- !u!114 &2141475479
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2141475477}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c359ad154dfd2f74e9772d166c4b88df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  message: You found part of a picture.
-  IsFound: 0
-  InventoryPosition: {fileID: 1926953687}
---- !u!65 &2141475480
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2141475477}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.5605921, y: 0.5430705, z: 0.007884068}
-  m_Center: {x: 0, y: 0, z: -0.01088361}
---- !u!114 &2141475481
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2141475477}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c114d81145fbbf54c8cf799fff332015, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2141773139
 GameObject:
   m_ObjectHideFlags: 0
