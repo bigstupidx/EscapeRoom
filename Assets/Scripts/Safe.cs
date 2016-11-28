@@ -7,6 +7,7 @@ public class Safe : Searchable
 	public UnlockSafe keyPad;
 	public GoalMover safeLid;
 
+
 	public override void OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData)
 	{
 		base.OnPointerClick(eventData);

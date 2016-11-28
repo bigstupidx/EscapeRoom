@@ -9,7 +9,7 @@ public class UnlockSafe : MonoBehaviour {
 	public GameObject openSafeTop;
 	public GameObject keyPad;
 	public Searchable safe;
-	private static readonly Vector3 hiddenPosition = new Vector3(1000, 1000, 1000);
+	public static readonly Vector3 hiddenPosition = new Vector3(1000, 1000, 1000);
 
 	// Use this for initialization
 	void Start () {
