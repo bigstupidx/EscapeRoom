@@ -152,6 +152,7 @@ public class MenuManager : MonoBehaviour
 	{
 		// Generate file name in the format slot#Recording.xml
 		return string.Format("{0}{1}slot{2}Recording.xml", Application.persistentDataPath, Path.DirectorySeparatorChar, slot);
+	
 	}
 
 	public void LoadRecordingFromSlotButtonPressed(int slot)
