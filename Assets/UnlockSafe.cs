@@ -5,10 +5,8 @@ public class UnlockSafe : MonoBehaviour {
 
 	public static string codeEntry;
 	public string combination;
-	public GoalMover safeTop;
-	public GameObject openSafeTop;
+	public Lockable safeTop;
 	public GameObject keyPad;
-	public Searchable safe;
 	public static readonly Vector3 hiddenPosition = new Vector3(1000, 1000, 1000);
 
 	// Use this for initialization
@@ -19,13 +17,11 @@ public class UnlockSafe : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (codeEntry.Equals (combination)) {
-			Vector3 pos = openSafeTop.transform.position;
-			Quaternion rot = openSafeTop.transform.rotation;
-		
-			safeTop.AddGoal (pos, rot, null);
+		if (safeTop.isLocked && codeEntry.Equals (combination)) {
+			safeTop.isLocked = false;
+			safeTop.IsOpen = true;
 			Hide();
-			safe.message = "Safe Unlocked!";
+			safeTop.DisplayMessage(safeTop.unlockedMessage);
 		}
 	}
 

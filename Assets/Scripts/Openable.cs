@@ -38,8 +38,10 @@ public class Openable : Focusable
 			openMover.MovementComplete += OpenMover_MovementComplete;
 
 			//Disable selection of object during animation
-			originalLayer = gameObject.layer;
-			gameObject.layer = (int)Layers.IgnoreRaycast;
+			if (gameObject.layer != (int)Layers.MovingObjects) {
+				originalLayer = gameObject.layer;
+				gameObject.layer = (int)Layers.MovingObjects;
+			}
 
 			if (IsOpen) {
 				// Move to open position

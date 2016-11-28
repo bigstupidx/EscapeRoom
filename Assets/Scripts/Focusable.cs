@@ -38,7 +38,7 @@ public class Focusable : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 		SelectionGlow.ClearGlowingObjects();
 	}
 
-	protected void DisplayMessage(string text)
+	public void DisplayMessage(string text)
 	{
 		// Do nothing if message is null or empty
 		if (string.IsNullOrEmpty(text)) {
