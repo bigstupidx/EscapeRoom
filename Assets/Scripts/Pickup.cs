@@ -39,7 +39,7 @@ public class Pickup : Searchable
 
 		//Disable selection of objects while it is moving
 		previousLayer = gameObject.layer;
-		gameObject.layer = (int)Layers.IgnoreRaycast;
+		gameObject.layer = (int)Layers.MovingObjects;
 
 		mover.MovementComplete += Mover_MovementCompleteRenableSelection;
 

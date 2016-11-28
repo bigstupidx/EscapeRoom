@@ -8,6 +8,8 @@ public enum Layers
 	Water = 4,
 	UI = 5,
 	Glowing = 8,
-	InspectedObject = 9
+	InspectedObject = 9,
+	FireLayer = 10,
+	MovingObjects = 11
 }
 

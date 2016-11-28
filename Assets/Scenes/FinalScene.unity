@@ -7849,7 +7849,7 @@ MonoBehaviour:
   vrModeOnly: 0
   SelectionMask:
     serializedVersion: 2
-    m_Bits: 4294967291
+    m_Bits: 4294965243
 --- !u!114 &1166372086
 MonoBehaviour:
   m_ObjectHideFlags: 0
