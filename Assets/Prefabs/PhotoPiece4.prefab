@@ -21,6 +21,10 @@ GameObject:
   - 4: {fileID: 4000010300361382}
   - 33: {fileID: 33000010832615886}
   - 23: {fileID: 23000012606477442}
+  - 65: {fileID: 65000013667500764}
+  - 114: {fileID: 114000012627095546}
+  - 114: {fileID: 114000011043860346}
+  - 114: {fileID: 114000011500844576}
   m_Layer: 0
   m_Name: PhotoPiece4
   m_TagString: Untagged
@@ -34,8 +38,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012874070650}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0.013068201}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.96, y: 0.645, z: 0.97}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -54,8 +58,8 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 4c31791ac8120ae488c033b3f3b9f24a, type: 2}
-  - {fileID: 2100000, guid: 4adcb1ef28d870e4091a4d86ba60e479, type: 2}
+  - {fileID: 2100000, guid: 53b4739616519b34f8ae26e5d7d1f01a, type: 2}
+  - {fileID: 2100000, guid: c01e2e13a75dc2248b8f235947a0a904, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
@@ -78,3 +82,62 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012874070650}
   m_Mesh: {fileID: 4300004, guid: 8977d37721a7b33488cf013be74f006d, type: 3}
+--- !u!65 &65000013667500764
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012874070650}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5605921, y: 0.5430705, z: 0.007884068}
+  m_Center: {x: 0, y: 0, z: -0.01088361}
+--- !u!114 &114000011043860346
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012874070650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c359ad154dfd2f74e9772d166c4b88df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: You found part of a picture.
+  IsFound: 0
+  InventoryPosition: {fileID: 0}
+--- !u!114 &114000011500844576
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012874070650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c114d81145fbbf54c8cf799fff332015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114000012627095546
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012874070650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eadac8e6e0248d4c9f41d1683746e7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSpeed: 3
+  maxAcceleration: 1
+  slowRadius: 5
+  targetRadius: 0.01
+  velocity: {x: 0, y: 0, z: 0}
+  acceleration: {x: 0, y: 0, z: 0}
+  rotationSpeed: 0
+  angularAcceleration: 0
+  maxAngularAcceleration: 50
+  maxRotationSpeed: 180
+  slowAngle: 50
