@@ -59,9 +59,4 @@ public class Focusable : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 	public void RotateToFaceCamera() {
 		Util.RotateToFaceCamera(transform);
 	}
-
-    public bool IsHighlighted(GameObject go)
-    {
-        return SelectionGlow.IsObjectGlowing(go);
-    }
 }

@@ -22,7 +22,7 @@ namespace TestSearch {
         }
         public void OnPointerClick()
         {
-            Click(objection);
+            TriggerClick(objection);
             search = objection.GetComponent<Searchable>();
             if (nm.GetComponentInChildren<Text>().text.Equals("Nothing Here."))
                 IntegrationTest.Pass(gameObject);

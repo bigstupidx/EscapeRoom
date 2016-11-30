@@ -25,7 +25,7 @@ namespace TestSearch
 
         public void OnPointerClick()
         {
-            Click(objection);
+            TriggerClick(objection);
             search = objection.GetComponent<Television>();
             if (nm.GetComponentInChildren<Text>().text.Equals("You found the key!") && search.key.activeSelf )
                 IntegrationTest.Pass(gameObject);
