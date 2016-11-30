@@ -61,6 +61,9 @@ public class MenuManager : MonoBehaviour
 
 		// Reset the starting panel back to main for next time
 		StartingPanel = Panels.Main;
+
+		// Make sure the setting says the right thing.
+		UpdateCameraModeText();
 	}
 
 	private static Panels _startingPanel = Panels.Main;
@@ -221,6 +224,23 @@ public class MenuManager : MonoBehaviour
 
 		// Start playing back the recording
 		RecordingManager.StartPlayback();
+	}
+
+	public Text cameraMotionSettingText;
+
+	public static bool InstantCameraMotion = true;
+
+	public void ToggleCameraMode() {
+		InstantCameraMotion = !InstantCameraMotion;
+		UpdateCameraModeText();
+	}
+
+	private void UpdateCameraModeText() {
+		if (InstantCameraMotion) {
+			cameraMotionSettingText.text = "Camera Mode: Instant";
+		} else {
+			cameraMotionSettingText.text = "Camera Mode: Gradual";
+		}
 	}
 
 	public void SaveRecordingYesButtonPressed()
