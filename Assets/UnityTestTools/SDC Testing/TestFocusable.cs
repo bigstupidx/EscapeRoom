@@ -8,7 +8,7 @@ namespace TestSearch
     {
         public GameObject objection;
         public Functions callOnMethod;
-        private Searchable search;
+        private Focusable focus;
         public Canvas nm;
         public enum Functions
         {
@@ -25,7 +25,7 @@ namespace TestSearch
         public void OnPointerEnter()
         {
             Enter(objection);
-            if (objection.GetComponent<Renderer>().material.shader.name.Equals("Outlined/Diffuse"))
+            if (gameObject.GetComponent<Focusable>().IsHighlighted(gameObject))
                 IntegrationTest.Pass(gameObject);
             else
                 IntegrationTest.Fail(gameObject);
@@ -34,7 +34,7 @@ namespace TestSearch
         public void OnPointerExit()
         {
             Exit(objection);
-            if (objection.GetComponent<Renderer>().material.shader.name.Equals("Standard"))
+            if (gameObject.GetComponent<Focusable>().IsHighlighted(gameObject))
                 IntegrationTest.Pass(gameObject);
             else
                 IntegrationTest.Fail(gameObject);
