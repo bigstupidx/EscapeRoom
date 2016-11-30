@@ -56,6 +56,16 @@ public class SelectionGlow : PostEffectsBase
 		
 	private static List<GlowingObjectInfo> glowingObjects = new List<GlowingObjectInfo>();
 
+	public static bool IsObjectGlowing(GameObject go) {
+		foreach (GlowingObjectInfo info in glowingObjects) {
+			if (info.gameObject == go) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public override bool CheckResources()
 	{
 		CheckSupport(false);
