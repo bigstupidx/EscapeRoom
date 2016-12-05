@@ -97,7 +97,7 @@ public class SelectionGlow : PostEffectsBase
 
 	public void OnRenderImage(RenderTexture source, RenderTexture destination)
 	{
-		if (CheckResources() == false) {
+		if (CheckResources() == false || glowingObjects.Count == 0) {
 			Graphics.Blit(source, destination);
 			return;
 		}
