@@ -6,9 +6,15 @@ public class Lightswitch : Openable {
 	public Light[] onLights;
 	public Light[] offLights;
 
-    public LightmapData[] prevLightMaps;
+    public Texture2D onLightmap;
+    public Texture2D onLightDirection;
+    public Texture2D offLightmap;
+    public Texture2D offLightDirection;
 
-	public Projector mapProjector;
+    private LightmapData[] onLightMapData;
+    private LightmapData[] offLightMapData;
+
+    public Projector mapProjector;
 
 	public Desklamp deskLamp;
 
@@ -24,7 +30,17 @@ public class Lightswitch : Openable {
 			light.enabled = true;
 		}
 
-		Opened += Lightswitch_Opened;
+        onLightMapData = new LightmapData[1];
+        onLightMapData[0] = new LightmapData();
+        onLightMapData[0].lightmapFar = onLightmap;
+        onLightMapData[0].lightmapNear = onLightDirection;
+
+        offLightMapData = new LightmapData[1];
+        offLightMapData[0] = new LightmapData();
+        offLightMapData[0].lightmapFar = offLightmap;
+        offLightMapData[0].lightmapNear = offLightDirection;
+
+        Opened += Lightswitch_Opened;
 		Closed += Lightswitch_Closed;
 	}
 
@@ -38,12 +54,7 @@ public class Lightswitch : Openable {
 			light.enabled = false;
 		}
 
-        if (LightmapSettings.lightmaps != null)
-        {
-            prevLightMaps = LightmapSettings.lightmaps;
-        }
-
-        LightmapSettings.lightmaps = null;
+        LightmapSettings.lightmaps = offLightMapData;
 
 		if (deskLamp.isOn) {
 			mapProjector.material.color = Color.white;
@@ -56,7 +67,7 @@ public class Lightswitch : Openable {
 			light.enabled = false;
 		}
 
-        LightmapSettings.lightmaps = prevLightMaps;
+        LightmapSettings.lightmaps = onLightMapData;
 
         foreach (Light light in onLights) {
 			light.enabled = true;

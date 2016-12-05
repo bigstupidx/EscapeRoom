@@ -71,7 +71,7 @@ LightmapSettings:
     m_FinalGatherFiltering: 1
     m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
-  m_LightingDataAsset: {fileID: 112000001, guid: a5e40d7579056db44948abf72f4052df,
+  m_LightingDataAsset: {fileID: 112000001, guid: 43ec826bcb893164e829d1abaa9d0cf5,
     type: 2}
   m_RuntimeCPUUsage: 25
 --- !u!196 &4
@@ -627,6 +627,10 @@ Prefab:
     - target: {fileID: 467082, guid: 8a23a06107e96134598493163a37174f, type: 2}
       propertyPath: m_LocalPosition.y
       value: -0.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 10844460, guid: 8a23a06107e96134598493163a37174f, type: 2}
+      propertyPath: m_Lightmapping
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8a23a06107e96134598493163a37174f, type: 2}
@@ -7811,6 +7815,10 @@ MonoBehaviour:
   - {fileID: 545301158}
   offLights:
   - {fileID: 1731167202}
+  onLightmap: {fileID: 2800000, guid: ab6274d31b31e76449b638b8601444b3, type: 3}
+  onLightDirection: {fileID: 2800000, guid: 1cfcad1e5fb0d884c9d984c2d56b8f75, type: 3}
+  offLightmap: {fileID: 2800000, guid: 7576505d8d72a974aa44cd3393ce0ad3, type: 3}
+  offLightDirection: {fileID: 2800000, guid: 49d7b2fec5e90b846ad90334b5f49875, type: 3}
   mapProjector: {fileID: 1914739576}
   deskLamp: {fileID: 2143253080}
 --- !u!114 &1001656668
@@ -12948,7 +12956,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Lightmapping: 4
+  m_Lightmapping: 1
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
   m_ShadowRadius: 0
