@@ -15,6 +15,9 @@ ModelImporter:
     100014: Dirt
     100016: Floor
     100018: FloorBox
+    100020: FloorWithBox
+    100022: pCube1
+    100024: pCube2
     400000: box
     400002: //RootNode
     400004: keypad
@@ -25,6 +28,9 @@ ModelImporter:
     400014: Dirt
     400016: Floor
     400018: FloorBox
+    400020: FloorWithBox
+    400022: pCube1
+    400024: pCube2
     2300000: box
     2300002: keypad
     2300004: lid
@@ -32,6 +38,8 @@ ModelImporter:
     2300008: polySurface2
     2300010: Dirt
     2300012: Floor
+    2300014: pCube1
+    2300016: pCube2
     3300000: box
     3300002: keypad
     3300004: lid
@@ -39,6 +47,8 @@ ModelImporter:
     3300008: polySurface2
     3300010: Dirt
     3300012: Floor
+    3300014: pCube1
+    3300016: pCube2
     4300000: polySurface1
     4300002: polySurface2
     4300004: lid
@@ -46,6 +56,8 @@ ModelImporter:
     4300008: box
     4300010: Floor
     4300012: Dirt
+    4300014: pCube1
+    4300016: pCube2
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -78,7 +90,7 @@ ModelImporter:
     swapUVChannels: 0
     generateSecondaryUV: 1
     useFileUnits: 1
-    optimizeMeshForGPU: 0
+    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
     secondaryUVAngleDistortion: 1
