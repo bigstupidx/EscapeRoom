@@ -6,6 +6,7 @@ public class Lightswitch : Openable {
 	public Light[] onLights;
 	public Light[] offLights;
 
+    public LightmapData[] prevLightMaps;
 
 	public Projector mapProjector;
 
@@ -37,6 +38,13 @@ public class Lightswitch : Openable {
 			light.enabled = false;
 		}
 
+        if (LightmapSettings.lightmaps != null)
+        {
+            prevLightMaps = LightmapSettings.lightmaps;
+        }
+
+        LightmapSettings.lightmaps = null;
+
 		if (deskLamp.isOn) {
 			mapProjector.material.color = Color.white;
 		}
@@ -48,7 +56,9 @@ public class Lightswitch : Openable {
 			light.enabled = false;
 		}
 
-		foreach (Light light in onLights) {
+        LightmapSettings.lightmaps = prevLightMaps;
+
+        foreach (Light light in onLights) {
 			light.enabled = true;
 		}
 
